@@ -9,19 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import geoip from "geoip-lite";
 import { getClientIp } from "request-ip";
-import uuidint from 'uuid-int';
+import uuidint from "uuid-int";
 const { lookup } = geoip;
 const setDefault = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return new Promise((resolve) => {
-        const ip = getClientIp(req);
-        const idAssign = Number(String(uuidint(0).uuid()).split('').splice(0, 4).join(''));
-        req.body.userid = idAssign;
-        req.body.picurl = "https://svgsilh.com/svg/1699635.svg";
-        req.body.country = lookup(ip).country;
-        req.body.groups = [];
-        req.body.friends = [];
-        resolve(res.status(200).json(req.body));
-    });
+    const ip = getClientIp(req);
+    const idAssign = Number(String(uuidint(0).uuid()).split("").splice(0, 4).join(""));
+    req.body.userid = idAssign;
+    req.body.picurl = "https://svgsilh.com/svg/1699635.svg";
+    req.body.country = lookup(ip).country;
+    req.body.groups = [];
+    req.body.friends = [];
+    res.status(200).json(req.body);
 });
 export { setDefault };
 //# sourceMappingURL=set.default.js.map
