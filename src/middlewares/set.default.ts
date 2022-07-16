@@ -1,10 +1,10 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import geoip from "geoip-lite";
 import { getClientIp } from "request-ip";
 import uuidint from "uuid-int";
 const { lookup } = geoip;
 
-const setDefault = async (req: Request) => {
+const setDefault = async (req: Request, res: Response) => {
   const ip = getClientIp(req);
   const idAssign = Number(
     String(uuidint(0).uuid()).split("").splice(0, 4).join("").toLowerCase()

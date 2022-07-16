@@ -43,7 +43,7 @@ app.post("/register-user", body("email")
         });
     }
     else {
-        yield setDefault(req, res);
+        setDefault(req, res);
     }
 }));
 app.post("/login-user", body("username").isString(), body("pwduser").isStrongPassword(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
