@@ -20,7 +20,22 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/register-user", body(""), async (req: Request, res: Response) => {});
+app.post(
+  "/register-user",
+  body("email")
+    .isEmail()
+    .isString()
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("username")
+    .isString()
+    .isLength({ min: 4 })
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("pwd")
+    .isString()
+    .isLength({ min: 8 })
+    .exists({ checkFalsy: true, checkNull: true }),
+  async (req: Request, res: Response) => {}
+);
 
 app.post(
   "/login-user",
@@ -28,12 +43,10 @@ app.post(
   body("pwduser").isStrongPassword(),
   async (req: Request, res: Response) => {
     if (!validationResult(req).isEmpty())
-      res
-        .status(401)
-        .json({
-          message: "No authorized",
-          errors: validationResult(req).array(),
-        });
+      res.status(401).json({
+        message: "No authorized",
+        errors: validationResult(req).array(),
+      });
     const body = req.body;
     checkUser(body);
   }
