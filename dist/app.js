@@ -13,10 +13,7 @@ import dotenv from "dotenv";
 import { body, validationResult } from "express-validator";
 import { checkUser } from "./database/database.queries.api.js";
 import helmet from "helmet";
-import geoip from "geoip-lite";
-import requestip from 'request-ip';
-const { getClientIp } = requestip;
-const { lookup } = geoip;
+import { setDefault } from "./middlewares/set.default.js";
 dotenv.config();
 const app = express();
 let port = process.env.PORT || 5000;
@@ -46,10 +43,7 @@ app.post("/register-user", body("email")
         });
     }
     else {
-        let clientip = getClientIp(req);
-        res.status(200).json({
-            message: req.body.username + "! Thanks for your visit! since " + lookup(clientip).country + " :D",
-        });
+        yield setDefault(req, res);
     }
 }));
 app.post("/login-user", body("username").isString(), body("pwduser").isStrongPassword(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {

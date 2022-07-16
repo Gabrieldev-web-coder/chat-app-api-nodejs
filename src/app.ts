@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { body, validationResult } from "express-validator";
 import { checkUser } from "./database/database.queries.api.js";
 import helmet from "helmet";
+import { setDefault } from "./middlewares/set.default.js";
 dotenv.config();
 
 const app = express();
@@ -40,6 +41,8 @@ app.post(
         message: "No authorized",
         errors: validationResult(req).array(),
       });
+    }else{
+      await setDefault(req,res)
     }
   }
 );
