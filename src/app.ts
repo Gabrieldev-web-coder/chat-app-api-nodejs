@@ -1,7 +1,6 @@
 import express, { Response, Request } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
 import { body, validationResult } from "express-validator";
 import { checkUser } from "./database/database.queries.api.js";
 import helmet from "helmet";
@@ -40,10 +39,6 @@ app.post(
       res.status(401).json({
         message: "No authorized",
         errors: validationResult(req).array(),
-      });
-    } else {
-      res.status(200).json({
-        message: "Request received.",
       });
     }
   }
