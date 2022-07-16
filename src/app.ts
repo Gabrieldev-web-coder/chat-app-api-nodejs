@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import { body, validationResult } from "express-validator";
 import { checkUser } from "./database/database.queries.api.js";
 import helmet from "helmet";
-
 dotenv.config();
 
 const app = express();
@@ -20,7 +19,30 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/register-user", body(""), async (req: Request, res: Response) => {});
+app.post(
+  "/register-user",
+  body("email")
+    .isEmail()
+    .isString()
+    .exists({ checkFalsy: true, checkNull: true })
+    .normalizeEmail(),
+  body("username")
+    .isString()
+    .isLength({ min: 4 })
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("pwd")
+    .isString()
+    .isLength({ min: 8 })
+    .exists({ checkFalsy: true, checkNull: true }),
+  async (req: Request, res: Response) => {
+    if (!validationResult(req).isEmpty()) {
+      res.status(401).json({
+        message: "No authorized",
+        errors: validationResult(req).array(),
+      });
+    }
+  }
+);
 
 app.post(
   "/login-user",

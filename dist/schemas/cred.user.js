@@ -12,10 +12,10 @@ const generateUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     return yield new Promise((resolve, reject) => {
         bcrypt.genSalt(12, (err, salt) => {
             if (err)
-                reject(err.name + ' ' + err.message);
+                reject(err.name + " " + err.message);
             bcrypt.hash(user.pwd, salt, (err, hashed) => {
                 if (err)
-                    reject(err.name + ' ' + err.message);
+                    reject(err.name + " " + err.message);
                 user.pwd = hashed;
                 resolve(user);
             });
