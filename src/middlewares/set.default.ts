@@ -2,9 +2,11 @@ import { Request } from "express";
 import geoip from "geoip-lite";
 import { getClientIp } from "request-ip";
 import uuidint from "uuid-int";
+import { registerNewUser } from '../schemas/cred.user.js';
+
 const { lookup } = geoip;
 
-const setDefault = async (req: Request) => {
+const setDefault = async (req: Request):Promise<registerNewUser> => {
   const ip = getClientIp(req);
   const idAssign = Number(
     String(uuidint(0).uuid()).split("").splice(12, 4).join("")
