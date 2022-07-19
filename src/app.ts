@@ -5,6 +5,7 @@ import { body, validationResult } from "express-validator";
 import { checkUser } from "./database/database.queries.api.js";
 import helmet from "helmet";
 import { setDefault } from "./middlewares/set.default.js";
+import {generateUser} from './middlewares/generate.user.js'
 dotenv.config();
 
 const app = express();
@@ -42,7 +43,8 @@ app.post(
         errors: validationResult(req).array(),
       });
     }else{
-      await setDefault(req,res)
+      const body = await generateUser(req)
+      res.status(200).json({body})
     }
   }
 );

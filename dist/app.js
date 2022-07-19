@@ -13,7 +13,7 @@ import dotenv from "dotenv";
 import { body, validationResult } from "express-validator";
 import { checkUser } from "./database/database.queries.api.js";
 import helmet from "helmet";
-import { setDefault } from "./middlewares/set.default.js";
+import { generateUser } from './middlewares/generate.user.js';
 dotenv.config();
 const app = express();
 let port = process.env.PORT || 5000;
@@ -43,7 +43,8 @@ app.post("/register-user", body("email")
         });
     }
     else {
-        setDefault(req, res);
+        const body = yield generateUser(req);
+        res.status(200).json({ body });
     }
 }));
 app.post("/login-user", body("username").isString(), body("pwduser").isStrongPassword(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {

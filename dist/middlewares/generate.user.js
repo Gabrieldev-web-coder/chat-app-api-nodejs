@@ -7,19 +7,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import geoip from "geoip-lite";
-import { getClientIp } from "request-ip";
-import uuidint from "uuid-int";
-const { lookup } = geoip;
-const setDefault = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    const ip = getClientIp(req);
-    const idAssign = Number(String(uuidint(0).uuid()).split("").splice(12, 4).join(""));
-    req.body.userid = idAssign;
-    req.body.picurl = "https://svgsilh.com/svg/1699635.svg";
-    req.body.country = lookup(ip).country.toLowerCase();
-    req.body.groups = [];
-    req.body.friends = [];
-    return req.body;
+import bcrypt from "bcrypt";
+import { setDefault } from "./set.default.js";
+const generateUser = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield setDefault(req);
+    return yield new Promise((resolve, reject) => {
+        bcrypt.genSalt(12, (err, salt) => {
+            if (err)
+                reject(err.name + " " + err.message);
+            bcrypt.hash(user.pwd, salt, (err, hashed) => {
+                if (err)
+                    reject(err.name + " " + err.message);
+                user.pwd = hashed;
+                resolve(user);
+            });
+        });
+    });
 });
-export { setDefault };
-//# sourceMappingURL=set.default.js.map
+export { generateUser };
+//# sourceMappingURL=generate.user.js.map

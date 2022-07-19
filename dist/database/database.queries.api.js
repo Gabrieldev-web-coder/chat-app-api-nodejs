@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { generateUser } from "../schemas/cred.user.js";
 import { Observable } from "rxjs";
 import dotenv from "dotenv";
 dotenv.config();
@@ -83,9 +82,9 @@ const saveDataUser = (userInfo) => {
                 .db(process.env.DB_API)
                 .collection(process.env.DB_COLLECTION_API);
             let user;
-            yield generateUser(userInfo)
-                .then((value) => (user = value))
-                .catch((err) => suscriber.error(err));
+            // await generateUser(userInfo)
+            //   .then((value) => (user = value))
+            //   .catch((err) => suscriber.error(err));
             yield collection
                 .insertOne({ user })
                 .catch((err) => suscriber.error(err))
@@ -112,9 +111,9 @@ const saveDataApiUser = (userInfo) => {
                 .db(process.env.DB_API)
                 .collection(process.env.DB_COLLECTION_API);
             let user;
-            yield generateUser(userInfo)
-                .then((value) => (user = value))
-                .catch((err) => suscriber.error(err));
+            // await generateUser(userInfo)
+            //   .then((value) => (user = value))
+            //   .catch((err) => suscriber.error(err));
             yield collection
                 .insertOne({ user })
                 .catch((err) => suscriber.error(err))
