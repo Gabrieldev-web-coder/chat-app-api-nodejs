@@ -21,7 +21,10 @@ const registerUser = (user: registerNewUser) => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
-      const checkingUser = collection.find({ user });
+      let checkingUser;
+      await collection
+        .findOne({ user })
+        .then((value) => (checkingUser = value));
       console.log(checkingUser);
       if (!checkingUser) {
         let token: string | null = null;

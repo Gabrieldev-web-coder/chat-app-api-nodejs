@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { MongoClient, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
+import { generateToken } from "../jwt.auth/jwt.js";
 dotenv.config();
 const registerUser = (user) => {
     return new Observable((suscriber) => {
@@ -24,23 +25,37 @@ const registerUser = (user) => {
             const collection = client
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
-            const checkingUser = collection.find({ user });
+            let checkingUser;
+            yield collection
+                .findOne({ user })
+                .then((value) => (checkingUser = value));
             console.log(checkingUser);
             if (!checkingUser) {
+                let token = null;
+                let jwtErr = "";
+                generateToken(JSON.stringify(user)).subscribe({
+                    next: (value) => (token = value),
+                    error: (err) => (jwtErr = err),
+                });
                 yield collection
                     .insertOne({ user })
                     .catch((err) => {
                     suscriber.error(err);
                 })
                     .then((value) => {
-                    suscriber.next(value);
+                    if (!jwtErr) {
+                        suscriber.next({ saveResult: value, token: token });
+                    }
+                    else {
+                        suscriber.error("Error generating token: " + jwtErr);
+                    }
                 });
                 yield client.close().finally(() => {
                     suscriber.complete();
                 });
             }
             else {
-                suscriber.error('This user already exist, consider login.');
+                suscriber.error("This user already exist, consider login.");
             }
         }));
     });
