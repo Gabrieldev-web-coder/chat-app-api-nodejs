@@ -5,11 +5,8 @@ const { sign, verify } = jwt;
 dotenv.config();
 const generateToken = (body) => {
     return new Observable((suscriber) => {
-        sign(body, process.env.SECRET, { algorithm: "RS256" }, (err, payload) => {
-            if (err)
-                return suscriber.error(err.message);
-            suscriber.next(payload);
-        });
+        let token = sign({ body }, process.env.SECRET);
+        suscriber.next(token);
     });
 };
 const verifyJwt = (token) => {

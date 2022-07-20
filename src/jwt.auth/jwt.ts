@@ -9,11 +9,8 @@ dotenv.config();
 
 const generateToken = (body: string): Observable<string> => {
   return new Observable((suscriber) => {
-    sign(body, process.env.SECRET, (err, payload) => {
-      if (err) return suscriber.error(err.message);
-      suscriber.next(payload);
-    });
-    suscriber.complete()
+    let token = sign({body}, process.env.SECRET)
+    suscriber.next(token)
   });
 };
 
