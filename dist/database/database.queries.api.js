@@ -7,21 +7,87 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion } from "mongodb";
 import { generateUser } from "../schemas/cred.user.js";
 import { Observable } from "rxjs";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 const checkUserApi = (userCredentials) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+        const client = new MongoClient(process.env.DB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverApi: ServerApiVersion.v1,
+        });
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
-                suscriber.error(err.name + ' ' + err.message);
-            const collection = client.db(process.env.DB_API).collection(process.env.DB_COLLECTION_API);
-            yield collection.findOne({
-                $and: [{ username: userCredentials.username, pwd: userCredentials.pwd }]
+                suscriber.error(err.name + " " + err.message);
+            const collection = client
+                .db(process.env.DB_API)
+                .collection(process.env.DB_COLLECTION_API);
+            yield collection
+                .findOne({
+                $and: [
+                    { username: userCredentials.username, pwd: userCredentials.pwd },
+                ],
             })
+                .catch((err) => suscriber.error(err))
+                .then((value) => suscriber.next(value))
+                .finally(() => {
+                client.close().finally(() => {
+                    suscriber.complete();
+                });
+            });
+        }));
+    });
+};
+const checkUser = (userCredentials) => {
+    return new Observable((suscriber) => {
+        const client = new MongoClient(process.env.DB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverApi: ServerApiVersion.v1,
+        });
+        client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
+            if (err)
+                suscriber.error(err.name + " " + err.message);
+            const collection = client
+                .db(process.env.DB_API)
+                .collection(process.env.DB_COLLECTION_API);
+            yield collection
+                .findOne({
+                username: userCredentials.username,
+                pwd: userCredentials.pwd,
+            })
+                .catch((err) => suscriber.error(err))
+                .then((value) => suscriber.next(value))
+                .finally(() => {
+                client.close().finally(() => {
+                    suscriber.complete();
+                });
+            });
+        }));
+    });
+};
+const saveDataUser = (userInfo) => {
+    return new Observable((suscriber) => {
+        const client = new MongoClient(process.env.DB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverApi: ServerApiVersion.v1,
+        });
+        client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
+            if (err)
+                suscriber.error(err.name + " " + err.message);
+            const collection = client
+                .db(process.env.DB_API)
+                .collection(process.env.DB_COLLECTION_API);
+            let user;
+            yield generateUser(userInfo)
+                .then((value) => (user = value))
+                .catch((err) => suscriber.error(err));
+            yield collection
+                .insertOne({ user })
                 .catch((err) => suscriber.error(err))
                 .then((value) => suscriber.next(value))
                 .finally(() => {
@@ -34,16 +100,23 @@ const checkUserApi = (userCredentials) => {
 };
 const saveDataApiUser = (userInfo) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+        const client = new MongoClient(process.env.DB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverApi: ServerApiVersion.v1,
+        });
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
-                suscriber.error(err.name + ' ' + err.message);
-            const collection = client.db(process.env.DB_API).collection(process.env.DB_COLLECTION_API);
+                suscriber.error(err.name + " " + err.message);
+            const collection = client
+                .db(process.env.DB_API)
+                .collection(process.env.DB_COLLECTION_API);
             let user;
             yield generateUser(userInfo)
-                .then((value) => user = value)
+                .then((value) => (user = value))
                 .catch((err) => suscriber.error(err));
-            yield collection.insertOne({ user })
+            yield collection
+                .insertOne({ user })
                 .catch((err) => suscriber.error(err))
                 .then((value) => suscriber.next(value))
                 .finally(() => {
@@ -54,5 +127,5 @@ const saveDataApiUser = (userInfo) => {
         }));
     });
 };
-export { checkUserApi, saveDataApiUser };
+export { checkUserApi, checkUser, saveDataApiUser };
 //# sourceMappingURL=database.queries.api.js.map
