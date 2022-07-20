@@ -1,20 +1,18 @@
-import {sign,verify,JwtPayload} from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
+
+const { sign, verify } = jwt;
 
 dotenv.config();
 
 const generateToken = (body: string): Observable<string> => {
   return new Observable((suscriber) => {
-    sign(
-      body,
-      process.env.SECRET,
-      { algorithm: "RS256" },
-      (err, payload) => {
-        if (err) return suscriber.error("Error generating jwt: " + err.message);
-        suscriber.next(payload);
-      }
-    );
+    sign(body, process.env.SECRET, { algorithm: "RS256" }, (err, payload) => {
+      if (err) return suscriber.error("Error generating jwt: " + err.message);
+      suscriber.next(payload);
+    });
     suscriber.complete();
   });
 };
@@ -31,4 +29,4 @@ const verifyJwt = (token: string): Observable<string | JwtPayload> => {
   });
 };
 
-export { generateToken, verifyJwt }
+export { generateToken, verifyJwt };
