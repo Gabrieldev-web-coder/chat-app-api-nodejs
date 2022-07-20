@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 
 dotenv.config();
 
-const registerUser = () => {
+const registerUser = (user:RegisterNewUser) => {
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -18,8 +18,9 @@ const registerUser = () => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-      collection.find({});
+      collection.insertOne({
 
+      });
       await client.close().finally(() => {
         suscriber.complete();
       });

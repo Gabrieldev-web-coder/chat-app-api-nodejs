@@ -1,5 +1,5 @@
 import { MongoClient, ServerApiVersion, MongoClientOptions } from "mongodb";
-import { cred, userData, generateUser } from "../schemas/cred.user.js";
+import { cred, userData } from "../schemas/cred.user.js";
 import { Observable } from "rxjs";
 import dotenv from "dotenv";
 
@@ -75,9 +75,9 @@ const saveDataUser = (userInfo: userData) => {
         .db(process.env.DB_API)
         .collection(process.env.DB_COLLECTION_API);
       let user;
-      await generateUser(userInfo)
-        .then((value) => (user = value))
-        .catch((err) => suscriber.error(err));
+      // await generateUser(userInfo)
+      //   .then((value) => (user = value))
+      //   .catch((err) => suscriber.error(err));
 
       await collection
         .insertOne({ user })
@@ -105,9 +105,9 @@ const saveDataApiUser = (userInfo: userData) => {
         .db(process.env.DB_API)
         .collection(process.env.DB_COLLECTION_API);
       let user;
-      await generateUser(userInfo)
-        .then((value) => (user = value))
-        .catch((err) => suscriber.error(err));
+      // await generateUser(userInfo)
+      //   .then((value) => (user = value))
+      //   .catch((err) => suscriber.error(err));
 
       await collection
         .insertOne({ user })
