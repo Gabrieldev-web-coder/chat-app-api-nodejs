@@ -7,7 +7,7 @@ const generateToken = (body) => {
     return new Observable((suscriber) => {
         sign(body, process.env.SECRET, { algorithm: "RS256" }, (err, payload) => {
             if (err)
-                return suscriber.error("Error generating jwt: " + err.message);
+                return suscriber.error(err.message);
             suscriber.next(payload);
         });
         suscriber.complete();
