@@ -1,5 +1,6 @@
 import { MongoClient, ServerApiVersion, MongoClientOptions } from "mongodb";
 import { cred, userData } from "../schemas/cred.user.js";
+import { generateUser } from "../middlewares/generate.user.js";
 import { Observable } from "rxjs";
 import dotenv from "dotenv";
 

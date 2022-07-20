@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import geoip from "geoip-lite";
 import { getClientIp } from "request-ip";
 import uuidint from "uuid-int";
