@@ -13,17 +13,15 @@ interface userData extends cred {
   friends: string[];
 }
 
-const generateUser = async (user: userData): Promise<userData> => {
-  return await new Promise((resolve, reject) => {
-    bcrypt.genSalt(12, (err, salt) => {
-      if (err) reject(err.name + " " + err.message);
-      bcrypt.hash(user.pwd, salt, (err, hashed) => {
-        if (err) reject(err.name + " " + err.message);
-        user.pwd = hashed;
-        resolve(user);
-      });
-    });
-  });
-};
+interface registerNewUser {
+  email: string;
+  username: string;
+  pwd: string;
+  userid: number;
+  picurl: string;
+  country: string;
+  groups: string[];
+  friends: string[];
+}
 
-export { cred, userData, generateUser };
+export { cred, userData, registerNewUser };
