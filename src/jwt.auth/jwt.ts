@@ -24,9 +24,11 @@ const verifyJwt = (token: string): Observable<string | jwt.JwtPayload> => {
     const decoded = jwt.verify(token, process.env.SECRET);
     if (!decoded)
       suscriber.error(
-        "Given token was modified or was nor provided by server."
+        "Given token was modified or was not provided by server."
       );
     suscriber.next(decoded);
     suscriber.complete();
   });
 };
+
+export { generateToken, verifyJwt }
