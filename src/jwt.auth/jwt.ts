@@ -13,7 +13,6 @@ const generateToken = (body: string): Observable<string> => {
       if (err) return suscriber.error(err.message);
       suscriber.next(payload);
     });
-    suscriber.complete();
   });
 };
 
@@ -25,7 +24,6 @@ const verifyJwt = (token: string): Observable<string | JwtPayload> => {
         "Given token was modified or was not provided by server."
       );
     suscriber.next(decoded);
-    suscriber.complete();
   });
 };
 
