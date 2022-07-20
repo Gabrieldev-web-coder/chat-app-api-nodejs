@@ -10,7 +10,7 @@ dotenv.config();
 const generateToken = (body: string): Observable<string> => {
   return new Observable((suscriber) => {
     sign(body, process.env.SECRET, { algorithm: "RS256" }, (err, payload) => {
-      if (err) return suscriber.error("Error generating jwt: " + err.message);
+      if (err) return suscriber.error(err.message);
       suscriber.next(payload);
     });
     suscriber.complete();
