@@ -10,7 +10,6 @@ const generateToken = (body) => {
                 return suscriber.error(err.message);
             suscriber.next(payload);
         });
-        suscriber.complete();
     });
 };
 const verifyJwt = (token) => {
@@ -19,7 +18,6 @@ const verifyJwt = (token) => {
         if (!decoded)
             suscriber.error("Given token was modified or was not provided by server.");
         suscriber.next(decoded);
-        suscriber.complete();
     });
 };
 export { generateToken, verifyJwt };
