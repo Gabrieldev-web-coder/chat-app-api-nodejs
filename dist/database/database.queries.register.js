@@ -30,6 +30,7 @@ const registerUser = (user) => {
                 .findOne({ user })
                 .then((value) => (checkingUser = value));
             console.log(checkingUser);
+            console.log(user);
             if (!checkingUser) {
                 let token = null;
                 let jwtErr = "";

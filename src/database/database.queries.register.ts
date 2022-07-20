@@ -26,6 +26,7 @@ const registerUser = (user: registerNewUser) => {
         .findOne({ user })
         .then((value) => (checkingUser = value));
       console.log(checkingUser);
+      console.log(user)
       if (!checkingUser) {
         let token: string | null = null;
         let jwtErr: string = "";
