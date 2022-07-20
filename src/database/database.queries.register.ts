@@ -19,17 +19,24 @@ const registerUser = (user: registerNewUser) => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-      await collection
-        .insertOne({ user })
-        .catch((err) => {
-          suscriber.error(err);
-        })
-        .then((value) => {
-          suscriber.next(value);
+
+      const checkingUser = collection.find({ user });
+      console.log(checkingUser)
+      if (!checkingUser) {
+        await collection
+          .insertOne({ user })
+          .catch((err) => {
+            suscriber.error(err);
+          })
+          .then((value) => {
+            suscriber.next(value);
+          });
+        await client.close().finally(() => {
+          suscriber.complete();
         });
-      await client.close().finally(() => {
-        suscriber.complete();
-      });
+      } else {
+        suscriber.error('This user already exist, consider login.')
+      }
     });
   });
 };

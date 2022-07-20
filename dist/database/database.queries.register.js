@@ -24,17 +24,24 @@ const registerUser = (user) => {
             const collection = client
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
-            yield collection
-                .insertOne({ user })
-                .catch((err) => {
-                suscriber.error(err);
-            })
-                .then((value) => {
-                suscriber.next(value);
-            });
-            yield client.close().finally(() => {
-                suscriber.complete();
-            });
+            const checkingUser = collection.find({ user });
+            console.log(checkingUser);
+            if (!checkingUser) {
+                yield collection
+                    .insertOne({ user })
+                    .catch((err) => {
+                    suscriber.error(err);
+                })
+                    .then((value) => {
+                    suscriber.next(value);
+                });
+                yield client.close().finally(() => {
+                    suscriber.complete();
+                });
+            }
+            else {
+                suscriber.error('This user already exist, consider login.');
+            }
         }));
     });
 };
