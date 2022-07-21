@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { registerNewUser } from "../schemas/cred.user.js";
 import { generateToken } from "../jwt.auth/jwt.js";
 
-dotenv.config();
+dotenv.config()
 
 const registerUser = (user: registerNewUser) => {
   return new Observable((suscriber) => {
