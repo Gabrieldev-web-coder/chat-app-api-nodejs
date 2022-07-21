@@ -1,4 +1,4 @@
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
+import { Document, MongoClient, MongoClientOptions, ServerApiVersion, WithId } from "mongodb";
 import * as bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
@@ -21,9 +21,10 @@ const registerUser = (user: registerNewUser) => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
-      let checkingUser;
+      let checkingUser:WithId<Document>;
+      let userid = user.userid
       await collection
-        .findOne({ user })
+        .findOne({ "user.userid":userid })
         .then((value) => (checkingUser = value));
       console.log(checkingUser);
       console.log(user)
