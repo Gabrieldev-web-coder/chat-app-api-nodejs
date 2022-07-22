@@ -26,8 +26,9 @@ const registerUser = (user) => {
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
             let checkingUser;
+            let userid = user.userid;
             yield collection
-                .findOne({ user })
+                .findOne({ "user.userid": userid })
                 .then((value) => (checkingUser = value));
             console.log(checkingUser);
             console.log(user);

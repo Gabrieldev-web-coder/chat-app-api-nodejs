@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { validationResult, body } from "express-validator";
-import { Response, Request } from "express";
+
+import { Response,Request,Router } from "express";
+import { validationResult,body } from "express-validator";
 import { registerUser } from "../database/database.queries.register.js";
 import { generateUser } from "../middlewares/generate.user.js";
 
@@ -26,12 +26,11 @@ const register = Router().post(
         errors: validationResult(req).array(),
       });
     } else {
-      const body = await generateUser(req)
-      registerUser(body)
-      .subscribe({
-        next:(value) => res.status(200).json({result:value}),
-        error:(err) => res.status(501).json({errors:err})
-      })
+      const body = await generateUser(req);
+      registerUser(body).subscribe({
+        next: (value) => res.status(200).json({ result: value }),
+        error: (err) => res.status(501).json({ errors: err }),
+      });
     }
   }
 );
