@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -9,7 +9,7 @@ dotenv.config();
 
 const generateToken = (body: string): Observable<string> => {
   return new Observable((suscriber) => {
-    const token = jwt.sign({ body }, process.env.SECRET);
+    const token = sign({ body }, process.env.SECRET, { expiresIn: "2d" });
     suscriber.next(token);
   });
 };

@@ -1,5 +1,6 @@
 import {
   Document,
+  FindCursor,
   MongoClient,
   MongoClientOptions,
   ServerApiVersion,
@@ -27,38 +28,42 @@ const registerUser = (user: registerNewUser) => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
-      let checkingUser: WithId<Document>;
-      let userid = user.userid;
-      await collection
-        .findOne({ "user.userid": userid })
-        .then((value) => (checkingUser = value));
-      console.log(checkingUser);
-      console.log(user);
-      if (!checkingUser) {
-        let token: string | null = null;
-        let jwtErr: string = "";
-        generateToken(JSON.stringify(user)).subscribe({
-          next: (value: string) => (token = value),
+      const { email, username } = user;
+      //Problems with search duplicated method and jwt generator
+      collection
+        .find()
+        .filter({
+          $or: [{ "user.email": email }, { "user.username": username }],
+        })
+        .toArray(async (err, docs) => {
+          console.log(docs);
+          if (err) suscriber.error(err.message);
+          if (docs.length === 0) {
+            let token: string | null = null;
+            let jwtErr: string = "";
+            generateToken(JSON.stringify(user)).subscribe({
+              next: (value: string) => (token = value),
+            });
+            await collection
+              .insertOne({ user })
+              .catch((err) => {
+                suscriber.error(err);
+              })
+              .then((value) => {
+                if (!jwtErr) {
+                  suscriber.next({ saveResult: value, token: token });
+                } else {
+                  suscriber.error("Error generating token: " + jwtErr);
+                }
+              });
+            await client.close().finally(() => {
+              suscriber.complete();
+            });
+          } else {
+            suscriber.error("Your username or email is already taken.");
+            suscriber.complete();
+          }
         });
-        await collection
-          .insertOne({ user })
-          .catch((err) => {
-            suscriber.error(err);
-          })
-          .then((value) => {
-            if (!jwtErr) {
-              suscriber.next({ saveResult: value, token: token });
-            } else {
-              suscriber.error("Error generating token: " + jwtErr);
-            }
-          });
-        await client.close().finally(() => {
-          suscriber.complete();
-        });
-      } else {
-        suscriber.error("This user already exist, consider login.");
-        suscriber.complete();
-      }
     });
   });
 };

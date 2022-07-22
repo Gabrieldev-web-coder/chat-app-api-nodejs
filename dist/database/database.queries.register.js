@@ -25,40 +25,45 @@ const registerUser = (user) => {
             const collection = client
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
-            let checkingUser;
-            let userid = user.userid;
-            yield collection
-                .findOne({ "user.userid": userid })
-                .then((value) => (checkingUser = value));
-            console.log(checkingUser);
-            console.log(user);
-            if (!checkingUser) {
-                let token = null;
-                let jwtErr = "";
-                generateToken(JSON.stringify(user)).subscribe({
-                    next: (value) => (token = value),
-                });
-                yield collection
-                    .insertOne({ user })
-                    .catch((err) => {
-                    suscriber.error(err);
-                })
-                    .then((value) => {
-                    if (!jwtErr) {
-                        suscriber.next({ saveResult: value, token: token });
-                    }
-                    else {
-                        suscriber.error("Error generating token: " + jwtErr);
-                    }
-                });
-                yield client.close().finally(() => {
+            const { email, username } = user;
+            //Problems with search duplicated method and jwt generator
+            collection
+                .find()
+                .filter({
+                $or: [{ "user.email": email }, { "user.username": username }],
+            })
+                .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
+                console.log(docs);
+                if (err)
+                    suscriber.error(err.message);
+                if (docs.length === 0) {
+                    let token = null;
+                    let jwtErr = "";
+                    generateToken(JSON.stringify(user)).subscribe({
+                        next: (value) => (token = value),
+                    });
+                    yield collection
+                        .insertOne({ user })
+                        .catch((err) => {
+                        suscriber.error(err);
+                    })
+                        .then((value) => {
+                        if (!jwtErr) {
+                            suscriber.next({ saveResult: value, token: token });
+                        }
+                        else {
+                            suscriber.error("Error generating token: " + jwtErr);
+                        }
+                    });
+                    yield client.close().finally(() => {
+                        suscriber.complete();
+                    });
+                }
+                else {
+                    suscriber.error("This user already exist, consider login.");
                     suscriber.complete();
-                });
-            }
-            else {
-                suscriber.error("This user already exist, consider login.");
-                suscriber.complete();
-            }
+                }
+            }));
         }));
     });
 };
