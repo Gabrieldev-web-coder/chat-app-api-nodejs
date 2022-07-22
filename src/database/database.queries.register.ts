@@ -1,11 +1,17 @@
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
-import * as bcrypt from "bcrypt";
+import {
+  Document,
+  MongoClient,
+  MongoClientOptions,
+  ServerApiVersion,
+  WithId,
+} from "mongodb";
+
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
 import { registerNewUser } from "../schemas/cred.user.js";
 import { generateToken } from "../jwt.auth/jwt.js";
 
-dotenv.config()
+dotenv.config();
 
 const registerUser = (user: registerNewUser) => {
   return new Observable((suscriber) => {
@@ -21,18 +27,18 @@ const registerUser = (user: registerNewUser) => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
-      let checkingUser;
+      let checkingUser: WithId<Document>;
+      let userid = user.userid;
       await collection
-        .findOne({ user })
+        .findOne({ "user.userid": userid })
         .then((value) => (checkingUser = value));
       console.log(checkingUser);
-      console.log(user)
+      console.log(user);
       if (!checkingUser) {
         let token: string | null = null;
         let jwtErr: string = "";
         generateToken(JSON.stringify(user)).subscribe({
-          next: (value) => (token = value),
-          error: (err) => (jwtErr = err),
+          next: (value: string) => (token = value),
         });
         await collection
           .insertOne({ user })
@@ -51,6 +57,7 @@ const registerUser = (user: registerNewUser) => {
         });
       } else {
         suscriber.error("This user already exist, consider login.");
+        suscriber.complete();
       }
     });
   });

@@ -1,6 +1,6 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import { Observable } from "rxjs";
+import * as jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 const { sign, verify } = jwt;
 dotenv.config();
 const generateToken = (body) => {

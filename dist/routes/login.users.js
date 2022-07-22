@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Router } from "express";
 import { validationResult, body } from "express-validator";
-const login = Router().post('/login-user', body('username')
+const login = Router().post('/chatapiv1/login-user', body('username')
     .isString()
     .isLength({ min: 4 }), body('pwduser')
     .isString().isLength({ min: 8 }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {

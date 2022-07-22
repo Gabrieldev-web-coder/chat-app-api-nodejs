@@ -1,8 +1,7 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { validationResult, body } from "express-validator";
-import { Response,Request } from "express";
 
-const login = Router().post('/login-user',
+const login = Router().post('/chatapiv1/login-user',
 body('username')
 .isString()
 .isLength({min:4}),
@@ -18,4 +17,4 @@ async (req:Request,res:Response)=>{
 }
 )
 
-export default login
+export default login;

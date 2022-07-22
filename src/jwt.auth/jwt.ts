@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
+import { Observable } from "rxjs";
+import * as jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
-import { Observable } from "rxjs";
 
 const { sign, verify } = jwt;
 
