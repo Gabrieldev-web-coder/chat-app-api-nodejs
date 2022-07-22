@@ -11,7 +11,7 @@ import { Router } from "express";
 import { validationResult, body } from "express-validator";
 import { registerUser } from "../database/database.queries.register.js";
 import { generateUser } from "../middlewares/generate.user.js";
-const register = Router().post("chatapiv1/register-user", body("email")
+const register = Router().post("/chatapiv1/register-user", body("email")
     .isEmail()
     .isString()
     .exists({ checkNull: true, checkFalsy: true })
