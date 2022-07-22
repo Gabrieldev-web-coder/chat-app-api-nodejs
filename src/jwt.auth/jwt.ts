@@ -9,7 +9,7 @@ dotenv.config();
 
 const generateToken = (body: string): Observable<string> => {
   return new Observable((suscriber) => {
-    const token = sign({ body }, process.env.SECRET);
+    const token = jwt.sign({ body }, process.env.SECRET);
     suscriber.next(token);
   });
 };
