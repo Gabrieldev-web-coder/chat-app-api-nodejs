@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ServerApiVersion, } from "mongodb";
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
 import { generateToken } from "../jwt.auth/jwt.js";
@@ -37,7 +37,6 @@ const registerUser = (user) => {
                 let jwtErr = "";
                 generateToken(JSON.stringify(user)).subscribe({
                     next: (value) => (token = value),
-                    error: (err) => (jwtErr = err),
                 });
                 yield collection
                     .insertOne({ user })
@@ -58,6 +57,7 @@ const registerUser = (user) => {
             }
             else {
                 suscriber.error("This user already exist, consider login.");
+                suscriber.complete();
             }
         }));
     });
