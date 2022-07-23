@@ -1,7 +1,6 @@
 import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 
 import { Observable } from "rxjs";
-import { Request } from "express";
 import dotenv from "dotenv";
 import { cred } from "../schemas/cred.user.js";
 
@@ -20,7 +19,13 @@ const checkUser = (userCred: cred): Observable<any> => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
+      const { username, email, pwd } = userCred;
+      
+      collection.find().filter({
+        $and:[
+            {$or:[{}]}
+        ]
+      });
     });
-    const { username, pwd } = userCred;
   });
 };
