@@ -1,5 +1,6 @@
 interface cred {
-  username: string;
+  email?: string;
+  username?: string;
   pwd: string;
 }
 
