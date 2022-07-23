@@ -18,13 +18,30 @@ const checkUser = (req: Request): Observable<any> => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-        
-    console.log(Object.keys(req.body))
-      //collection.find().filter({
-      //  $and: [{ $or: [{}] }],
-      //});
+      const fieldSelected = Object.keys(req.body)[0];
+      const value = req.body[fieldSelected]
+      if (fieldSelected === "username") {
+        collection
+          .find()
+          .filter({"user.username":value})
+          .toArray((err, docs) => {
+            if (err) suscriber.error(err);
+            const userpwd = docs[0].user.pwd
+          });
+        //.filter({
+        //  $and: [{ querySearch }, { queryPwd }],
+        //})
+      }else{
+        collection
+          .find()
+          .filter({"user.email":value})
+          .toArray((err, docs) => {
+            if (err) suscriber.error(err);
+            const userpwd = docs[0].user.pwd
+          });
+      }
     });
   });
 };
 
-export default checkUser
+export default checkUser;

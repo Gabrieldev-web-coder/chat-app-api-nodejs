@@ -17,8 +17,10 @@ const login = Router().post(
         errors: validationResult(req).array(),
       });
     } else {
-      console.log(req.body);
-      res.status(200).json({ msg: "Ok" });
+      checkUser(req).subscribe({
+        next: (value) => res.status(200).json({ result: value }),
+        error: (err) => res.status(500).json({ errors: [...err] }),
+      });
     }
   }
 );
