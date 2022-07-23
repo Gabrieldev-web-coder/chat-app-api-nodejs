@@ -39,10 +39,13 @@ const checkUser = (req: Request): Observable<loginResponse> => {
                 generateToken(body).subscribe({
                   next: (token) => (tokenResponse = token),
                 });
-                docs[0].user.token = tokenResponse;
-                suscriber.next(docs[0].user);
+                const response: loginResponse = docs[0].user;
+                response.token = tokenResponse;
+                suscriber.next(response);
+                suscriber.complete();
               } else {
                 suscriber.error("Incorrect password.");
+                suscriber.complete();
               }
             });
           });
@@ -64,10 +67,13 @@ const checkUser = (req: Request): Observable<loginResponse> => {
                 generateToken(body).subscribe({
                   next: (token) => (tokenResponse = token),
                 });
-                docs[0].user.token = tokenResponse;
-                suscriber.next(docs[0].user);
+                const response: loginResponse = docs[0].user;
+                response.token = tokenResponse;
+                suscriber.next(response);
+                suscriber.complete();
               } else {
                 suscriber.error("Incorrect password.");
+                suscriber.complete();
               }
             });
           });
