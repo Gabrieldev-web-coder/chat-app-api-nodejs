@@ -27,6 +27,7 @@ interface registerNewUser {
 }
 
 interface loginResponse {
+  token: string;
   email: string;
   username: string;
   userid: number;
