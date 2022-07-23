@@ -4,10 +4,11 @@ import { Observable } from "rxjs";
 import dotenv from "dotenv";
 import verifyPwd from "../middlewares/verify.password.js";
 import { generateToken } from "../jwt.auth/jwt.js";
+import { loginResponse } from "../schemas/cred.user.js";
 
 dotenv.config();
 
-const checkUser = (req: Request): Observable<any> => {
+const checkUser = (req: Request): Observable<loginResponse> => {
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -34,9 +35,12 @@ const checkUser = (req: Request): Observable<any> => {
               if (value) {
                 delete docs[0].user.pwd;
                 const body = JSON.stringify(docs[0].user);
+                let tokenResponse: string = "";
                 generateToken(body).subscribe({
-                  next: (token) => suscriber.next(token),
+                  next: (token) => (tokenResponse = token),
                 });
+                docs[0].user.token = tokenResponse;
+                suscriber.next(docs[0].user);
               } else {
                 suscriber.error("Incorrect password.");
               }
@@ -56,9 +60,12 @@ const checkUser = (req: Request): Observable<any> => {
               if (value) {
                 delete docs[0].user.pwd;
                 const body = JSON.stringify(docs[0].user);
+                let tokenResponse: string = "";
                 generateToken(body).subscribe({
-                  next: (token) => suscriber.next(token),
+                  next: (token) => (tokenResponse = token),
                 });
+                docs[0].user.token = tokenResponse;
+                suscriber.next(docs[0].user);
               } else {
                 suscriber.error("Incorrect password.");
               }
