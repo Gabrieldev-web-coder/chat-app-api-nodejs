@@ -30,9 +30,10 @@ const register = Router().post("/chatapiv1/register-user", body("email")
     }
     else {
         const body = yield generateUser(req);
-        registerUser(body).subscribe({
-            next: (value) => res.status(200).json({ result: value }),
-            error: (err) => res.status(501).json({ errors: err }),
+        registerUser(body)
+            .subscribe({
+            next: (value) => res.status(201).json({ result: value }),
+            error: (err) => res.status(500).json({ errors: err })
         });
     }
 }));

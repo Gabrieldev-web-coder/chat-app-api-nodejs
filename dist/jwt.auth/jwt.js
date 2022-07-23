@@ -5,7 +5,7 @@ const { sign, verify } = jwt;
 dotenv.config();
 const generateToken = (body) => {
     return new Observable((suscriber) => {
-        const token = sign({ body }, process.env.SECRET, { expiresIn: '2d' });
+        const token = sign({ body }, process.env.SECRET, { expiresIn: "2d" });
         suscriber.next(token);
     });
 };

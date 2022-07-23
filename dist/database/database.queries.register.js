@@ -60,7 +60,7 @@ const registerUser = (user) => {
                     });
                 }
                 else {
-                    suscriber.error("This user already exist, consider login.");
+                    suscriber.error("Your username or email is already taken.");
                     suscriber.complete();
                 }
             }));

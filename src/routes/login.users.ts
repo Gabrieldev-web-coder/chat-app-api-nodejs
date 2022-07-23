@@ -1,18 +1,17 @@
 import { Request, Response, Router } from "express";
 import { validationResult, body } from "express-validator";
+import checkUser from "../database/database.queries.login.js";
 
 const login = Router().post(
   "/chatapiv1/login-user",
   body("username")
     .isString()
-    .isLength({ min: 4 })
-    .exists({ checkFalsy: true, checkNull: true }) ||
+    .isLength({ min: 4 }),
     body("email")
       .isString()
       .isEmail()
-      .normalizeEmail()
-      .exists({ checkFalsy: true, checkNull: true }),
-  body("pwduser")
+      .normalizeEmail(),
+  body("pwd")
     .isString()
     .isLength({ min: 8 })
     .exists({ checkFalsy: true, checkNull: true }),
@@ -22,6 +21,8 @@ const login = Router().post(
         message: "No authorized",
         errors: validationResult(req).array(),
       });
+    }else{
+      checkUser(req)
     }
   }
 );
