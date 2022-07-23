@@ -23,7 +23,7 @@ const login = Router().post("/chatapiv1/login-user", body("username").isString()
     else {
         checkUser(req).subscribe({
             next: (value) => res.status(200).json({ result: value }),
-            error: (err) => res.status(500).json({ errors: [...err] }),
+            error: (err) => res.status(500).json({ errors: err }),
         });
     }
 }));

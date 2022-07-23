@@ -36,6 +36,8 @@ const checkUser = (req) => {
                     .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
                     if (err)
                         suscriber.error(err);
+                    if (!docs[0])
+                        suscriber.error("This user don't exist, consider register");
                     const hashedPwd = docs[0].user.pwd;
                     yield verifyPwd(plainpwd, hashedPwd).then((value) => {
                         if (value) {
