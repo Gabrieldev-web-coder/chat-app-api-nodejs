@@ -1,12 +1,11 @@
 import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
-
+import { Request } from "express";
 import { Observable } from "rxjs";
 import dotenv from "dotenv";
-import { cred } from "../schemas/cred.user.js";
 
 dotenv.config();
 
-const checkUser = (userCred: cred): Observable<any> => {
+const checkUser = (req: Request): Observable<any> => {
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -19,13 +18,13 @@ const checkUser = (userCred: cred): Observable<any> => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-      const { username, email, pwd } = userCred;
-      
-      collection.find().filter({
-        $and:[
-            {$or:[{}]}
-        ]
-      });
+        
+    console.log(Object.keys(req.body))
+      //collection.find().filter({
+      //  $and: [{ $or: [{}] }],
+      //});
     });
   });
 };
+
+export default checkUser
