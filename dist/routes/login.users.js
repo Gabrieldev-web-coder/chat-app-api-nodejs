@@ -9,16 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Router } from "express";
 import { validationResult, body } from "express-validator";
-import checkUser from "../database/database.queries.login.js";
 const login = Router().post("/chatapiv1/login-user", body("username")
     .isString()
     .isLength({ min: 4 })
-    .exists({ checkFalsy: true, checkNull: true }) ||
-    body("email")
-        .isString()
-        .isEmail()
-        .normalizeEmail()
-        .exists({ checkFalsy: true, checkNull: true }), body("pwduser")
+    .optional(true), body("email")
+    .isString()
+    .isEmail()
+    .normalizeEmail()
+    .optional(true), body("pwd")
     .isString()
     .isLength({ min: 8 })
     .exists({ checkFalsy: true, checkNull: true }), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,7 +27,8 @@ const login = Router().post("/chatapiv1/login-user", body("username")
         });
     }
     else {
-        checkUser(req);
+        console.log(req.body);
+        res.status(200).json({ msg: 'Ok' });
     }
 }));
 export default login;

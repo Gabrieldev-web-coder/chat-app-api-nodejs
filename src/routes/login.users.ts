@@ -4,13 +4,8 @@ import checkUser from "../database/database.queries.login.js";
 
 const login = Router().post(
   "/chatapiv1/login-user",
-  body("username")
-    .isString()
-    .isLength({ min: 4 }),
-    body("email")
-      .isString()
-      .isEmail()
-      .normalizeEmail(),
+  body("username").isString().isLength({ min: 4 }).optional(true),
+  body("email").isString().isEmail().normalizeEmail().optional(true),
   body("pwd")
     .isString()
     .isLength({ min: 8 })
@@ -21,8 +16,9 @@ const login = Router().post(
         message: "No authorized",
         errors: validationResult(req).array(),
       });
-    }else{
-      checkUser(req)
+    } else {
+      console.log(req.body);
+      res.status(200).json({ msg: "Ok" });
     }
   }
 );
