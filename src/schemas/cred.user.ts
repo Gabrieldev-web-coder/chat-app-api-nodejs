@@ -1,4 +1,3 @@
-
 interface cred {
   username: string;
   pwd: string;
@@ -19,8 +18,16 @@ interface registerNewUser {
   userid: number;
   picurl: string;
   country: string;
+  accountCreatedAt: string;
+  description: string;
   groups: string[];
   friends: string[];
 }
 
-export { cred, userData, registerNewUser };
+interface reqRegisterBody {
+  email: string;
+  username: string;
+  pwd: string;
+}
+
+export { cred, userData, registerNewUser, reqRegisterBody };
