@@ -16,6 +16,7 @@ const setDefault = async (req: Request): Promise<registerNewUser> => {
   req.body.country = lookup(ip).country.toLowerCase();
   req.body.accountCreatedAt = moment().format("LLLL");
   req.body.description = `Hi! i'm ${req.body.username}, nice to meet you! :D`;
+  req.body.lastMoficationAt = 'No changes yet.'
   req.body.groups = [];
   req.body.friends = [];
   return req.body;
