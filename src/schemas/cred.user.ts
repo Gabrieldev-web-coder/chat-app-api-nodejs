@@ -20,6 +20,7 @@ interface registerNewUser {
   country: string;
   accountCreatedAt: string;
   description: string;
+  profileModifiedAt: string;
   groups: string[];
   friends: string[];
 }
