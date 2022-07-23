@@ -24,10 +24,4 @@ interface registerNewUser {
   friends: string[];
 }
 
-interface reqRegisterBody {
-  email: string;
-  username: string;
-  pwd: string;
-}
-
-export { cred, userData, registerNewUser, reqRegisterBody };
+export { cred, userData, registerNewUser };
