@@ -1,4 +1,3 @@
-
 interface cred {
   username: string;
   pwd: string;
@@ -19,6 +18,9 @@ interface registerNewUser {
   userid: number;
   picurl: string;
   country: string;
+  accountCreatedAt: string;
+  description: string;
+  profileModifiedAt: string;
   groups: string[];
   friends: string[];
 }
