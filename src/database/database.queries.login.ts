@@ -2,6 +2,8 @@ import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import { Request } from "express";
 import { Observable } from "rxjs";
 import dotenv from "dotenv";
+import verifyPwd from "../middlewares/verify.password.js";
+import { generateToken } from "../jwt.auth/jwt.js";
 
 dotenv.config();
 
@@ -18,26 +20,49 @@ const checkUser = (req: Request): Observable<any> => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-      const fieldSelected = Object.keys(req.body)[0];
-      const value = req.body[fieldSelected]
+      const fieldSelected: string = Object.keys(req.body)[0];
+      const value: string = req.body[fieldSelected];
+      const plainpwd: string = req.body.pwd;
       if (fieldSelected === "username") {
         collection
           .find()
-          .filter({"user.username":value})
-          .toArray((err, docs) => {
+          .filter({ "user.username": value })
+          .toArray(async (err, docs) => {
             if (err) suscriber.error(err);
-            const userpwd = docs[0].user.pwd
+            const hashedPwd: string = docs[0].user.pwd;
+            await verifyPwd(plainpwd, hashedPwd).then((value) => {
+              if (value) {
+                delete docs[0].user.pwd;
+                const body = JSON.stringify(docs[0].user);
+                generateToken(body).subscribe({
+                  next: (token) => suscriber.next(token),
+                });
+              } else {
+                suscriber.error("Incorrect password.");
+              }
+            });
           });
         //.filter({
         //  $and: [{ querySearch }, { queryPwd }],
         //})
-      }else{
+      } else {
         collection
           .find()
-          .filter({"user.email":value})
-          .toArray((err, docs) => {
+          .filter({ "user.email": value })
+          .toArray(async (err, docs) => {
             if (err) suscriber.error(err);
-            const userpwd = docs[0].user.pwd
+            const hashedPwd: string = docs[0].user.pwd;
+            await verifyPwd(plainpwd, hashedPwd).then((value) => {
+              if (value) {
+                delete docs[0].user.pwd;
+                const body = JSON.stringify(docs[0].user);
+                generateToken(body).subscribe({
+                  next: (token) => suscriber.next(token),
+                });
+              } else {
+                suscriber.error("Incorrect password.");
+              }
+            });
           });
       }
     });
