@@ -28,18 +28,20 @@ const checkUser = (req: Request): Observable<loginResponse> => {
         collection
           .find()
           .filter({ "user.username": value })
-          .toArray(async (err, docs) => {
+          .toArray(async (err, users) => {
             if (err) suscriber.error(err);
-            const hashedPwd: string = docs[0].user.pwd;
+            if (!users[0])
+              suscriber.error("This user don't exist, consider register");
+            const hashedPwd: string = users[0].user.pwd;
             await verifyPwd(plainpwd, hashedPwd).then((value) => {
               if (value) {
-                delete docs[0].user.pwd;
-                const body = JSON.stringify(docs[0].user);
+                delete users[0].user.pwd;
+                const body = JSON.stringify(users[0].user);
                 let tokenResponse: string = "";
                 generateToken(body).subscribe({
                   next: (token) => (tokenResponse = token),
                 });
-                const response: loginResponse = docs[0].user;
+                const response: loginResponse = users[0].user;
                 response.token = tokenResponse;
                 suscriber.next(response);
                 suscriber.complete();
@@ -56,18 +58,18 @@ const checkUser = (req: Request): Observable<loginResponse> => {
         collection
           .find()
           .filter({ "user.email": value })
-          .toArray(async (err, docs) => {
+          .toArray(async (err, users) => {
             if (err) suscriber.error(err);
-            const hashedPwd: string = docs[0].user.pwd;
+            const hashedPwd: string = users[0].user.pwd;
             await verifyPwd(plainpwd, hashedPwd).then((value) => {
               if (value) {
-                delete docs[0].user.pwd;
-                const body = JSON.stringify(docs[0].user);
+                delete users[0].user.pwd;
+                const body = JSON.stringify(users[0].user);
                 let tokenResponse: string = "";
                 generateToken(body).subscribe({
                   next: (token) => (tokenResponse = token),
                 });
-                const response: loginResponse = docs[0].user;
+                const response: loginResponse = users[0].user;
                 response.token = tokenResponse;
                 suscriber.next(response);
                 suscriber.complete();
