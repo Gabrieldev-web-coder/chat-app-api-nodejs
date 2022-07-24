@@ -1,0 +1,45 @@
+import { Request, Response, Router } from "express";
+import { validationResult, body } from "express-validator";
+
+const modify = Router().put(
+  "/chatapiv1/update-user",
+  body("email")
+    .optional(true)
+    .isEmail()
+    .normalizeEmail()
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("username")
+    .optional(true)
+    .isLength({ min: 4 })
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("pwd")
+    .optional(true)
+    .isLength({ min: 8 })
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("picurl")
+    .optional(true)
+    .isURL()
+    .optional()
+    .exists({ checkFalsy: true, checkNull: true })
+    .isBase64()
+    .optional()
+    .exists({ checkFalsy: true, checkNull: true })
+    .exists({ checkFalsy: true, checkNull: true }),
+  body("country").optional(true).isString().isLength({ min: 2 }).isLowercase(),
+  body("description").optional(true).isString().isLength({ min: 50, max: 320 }),
+  body("token")
+    .isJWT()
+    .isString()
+    .exists({ checkFalsy: true, checkNull: true }),
+    //.custom(),
+  async (req: Request, res: Response) => {
+    if (!validationResult(req).isEmpty()) {
+      res.status(401).json({
+        message: "No authorized",
+        errors: validationResult(req).array(),
+      });
+    } else {
+      // ...
+    }
+  }
+);
