@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { validationResult, body } from "express-validator";
 import validateJwt from "../middlewares/check.jwt.js";
 
-const modify = Router().put(
+const update = Router().put(
   "/chatapiv1/update-user",
   body("email")
     .optional(true)
@@ -44,3 +44,5 @@ const modify = Router().put(
     }
   }
 );
+
+export default update
