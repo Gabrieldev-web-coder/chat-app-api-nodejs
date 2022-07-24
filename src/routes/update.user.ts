@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { validationResult, body } from "express-validator";
+import validateJwt from "../middlewares/check.jwt.js";
 
 const modify = Router().put(
   "/chatapiv1/update-user",
@@ -30,8 +31,8 @@ const modify = Router().put(
   body("token")
     .isJWT()
     .isString()
-    .exists({ checkFalsy: true, checkNull: true }),
-    //.custom(),
+    .exists({ checkFalsy: true, checkNull: true })
+    .custom(validateJwt),
   async (req: Request, res: Response) => {
     if (!validationResult(req).isEmpty()) {
       res.status(401).json({
