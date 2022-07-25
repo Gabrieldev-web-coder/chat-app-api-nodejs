@@ -1,4 +1,3 @@
-import { Observable } from "rxjs";
 import { Request } from "express";
 import updateUser from "../database/database.queries.update.js";
 

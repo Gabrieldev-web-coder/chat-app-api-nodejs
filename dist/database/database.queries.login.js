@@ -33,21 +33,21 @@ const checkUser = (req) => {
                 collection
                     .find()
                     .filter({ "user.username": value })
-                    .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
+                    .toArray((err, users) => __awaiter(void 0, void 0, void 0, function* () {
                     if (err)
                         suscriber.error(err);
-                    if (!docs[0])
+                    if (!users[0])
                         suscriber.error("This user don't exist, consider register");
-                    const hashedPwd = docs[0].user.pwd;
+                    const hashedPwd = users[0].user.pwd;
                     yield verifyPwd(plainpwd, hashedPwd).then((value) => {
                         if (value) {
-                            delete docs[0].user.pwd;
-                            const body = JSON.stringify(docs[0].user);
+                            delete users[0].user.pwd;
+                            const body = JSON.stringify(users[0].user);
                             let tokenResponse = "";
                             generateToken(body).subscribe({
                                 next: (token) => (tokenResponse = token),
                             });
-                            const response = docs[0].user;
+                            const response = users[0].user;
                             response.token = tokenResponse;
                             suscriber.next(response);
                             suscriber.complete();
@@ -66,19 +66,19 @@ const checkUser = (req) => {
                 collection
                     .find()
                     .filter({ "user.email": value })
-                    .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
+                    .toArray((err, users) => __awaiter(void 0, void 0, void 0, function* () {
                     if (err)
                         suscriber.error(err);
-                    const hashedPwd = docs[0].user.pwd;
+                    const hashedPwd = users[0].user.pwd;
                     yield verifyPwd(plainpwd, hashedPwd).then((value) => {
                         if (value) {
-                            delete docs[0].user.pwd;
-                            const body = JSON.stringify(docs[0].user);
+                            delete users[0].user.pwd;
+                            const body = JSON.stringify(users[0].user);
                             let tokenResponse = "";
                             generateToken(body).subscribe({
                                 next: (token) => (tokenResponse = token),
                             });
-                            const response = docs[0].user;
+                            const response = users[0].user;
                             response.token = tokenResponse;
                             suscriber.next(response);
                             suscriber.complete();
