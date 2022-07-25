@@ -40,4 +40,14 @@ interface loginResponse {
   friends: string[];
 }
 
-export { cred, userData, registerNewUser, loginResponse };
+interface optionalFields {
+  email?: string | undefined;
+  username?: string | undefined;
+  pwd?: string | undefined;
+  picurl?: string | undefined;
+  country?: string | undefined;
+  description?: string | undefined;
+  token?: string;
+}
+
+export { cred, userData, registerNewUser, loginResponse, optionalFields };
