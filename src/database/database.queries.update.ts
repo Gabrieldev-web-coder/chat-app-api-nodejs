@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { Request } from "express";
 import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import { Observable } from "rxjs";
+import selectFields from "../middlewares/fields.selection.js";
 
 dotenv.config();
 
@@ -13,14 +14,8 @@ const updateUser = async (keys: string[], req: Request) => {
       serverApi: ServerApiVersion.v1,
     } as MongoClientOptions);
 
-    //let doc: any = {};
-
-    //for (let i = 0; i < keys.length; i++) doc[keys[i]] = req.body[keys[i]];
-
-    //delete doc.token
-
-    //Made all this in a single function apart...
-
+    const fields = selectFields(keys,req)
+    
     //console.log("Fields to editm and his values: ");
     //console.log(doc);
     //suscriber.next(doc);
