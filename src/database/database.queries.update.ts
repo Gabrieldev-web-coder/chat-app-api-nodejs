@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
+import { Request } from "express";
 import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import { Observable } from "rxjs";
 
 dotenv.config();
 
-const updateUser = async (keys: string[]) => {
+const updateUser = async (keys: string[], req: Request) => {
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
