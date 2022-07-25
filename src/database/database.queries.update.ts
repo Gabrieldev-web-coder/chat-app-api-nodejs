@@ -13,19 +13,31 @@ const updateUser = async (keys: string[], req: Request) => {
       serverApi: ServerApiVersion.v1,
     } as MongoClientOptions);
 
-    client.connect(async (err) => {
-      if (err) suscriber.error(err);
-      const collection = client
-        .db(process.env.DB_REGISTER)
-        .collection(process.env.DB_COLLECTION_REGISTERED);
-      await collection
-        .findOneAndUpdate({}, {}) //Quering and update doc of user
-        .then((modify) => suscriber.next(modify))
-        .catch((err) => suscriber.error(err));
-      await client.close().finally(() => {
-        suscriber.complete();
-      });
-    });
+    //let doc: any = {};
+
+    //for (let i = 0; i < keys.length; i++) doc[keys[i]] = req.body[keys[i]];
+
+    //delete doc.token
+
+    //Made all this in a single function apart...
+
+    //console.log("Fields to editm and his values: ");
+    //console.log(doc);
+    //suscriber.next(doc);
+
+    // client.connect(async (err) => {
+    //   if (err) suscriber.error(err);
+    //   const collection = client
+    //     .db(process.env.DB_REGISTER)
+    //     .collection(process.env.DB_COLLECTION_REGISTERED);
+    //   await collection
+    //     .findOneAndUpdate({}, {}) //Quering and update doc of user
+    //     .then((modify) => suscriber.next(modify))
+    //     .catch((err) => suscriber.error(err));
+    //   await client.close().finally(() => {
+    //     suscriber.complete();
+    //   });
+    // });
   });
 };
 
