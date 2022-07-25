@@ -28,7 +28,7 @@ const update = Router().put(
     .exists({ checkFalsy: true, checkNull: true })
     .exists({ checkFalsy: true, checkNull: true }),
   body("country").optional(true).isString().isLength({ min: 2 }).isLowercase(),
-  body("description").optional(true).isString().isLength({ min: 50, max: 320 }),
+  body("description").optional(true).isString().isLength({ min: 10, max: 320 }),
   body("token")
     .isJWT()
     .isString()
