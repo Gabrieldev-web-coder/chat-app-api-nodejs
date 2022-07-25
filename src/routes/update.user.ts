@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { validationResult, body } from "express-validator";
 import validateJwt from "../middlewares/check.jwt.js";
+import updateUserFields from "../middlewares/update.user.fields.js";
 
 const update = Router().put(
   "/chatapiv1/update-user",
@@ -40,9 +41,11 @@ const update = Router().put(
         errors: validationResult(req).array(),
       });
     } else {
-      // ...
+      await updateUserFields(req)
+        .then((value) => res.status(200).json({ message: value }))
+        .catch((err) => res.status(500).json({ error: err }));
     }
   }
 );
 
-export default update
+export default update;
