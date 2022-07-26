@@ -2,11 +2,13 @@ import dotenv from "dotenv";
 import { Request } from "express";
 import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import { Observable } from "rxjs";
-import selectFields from "../middlewares/fields.selection.js";
 
 dotenv.config();
 
 const updateUser = async (keys: string[], req: Request) => {
+  const selectFields = await import("../middlewares/fields.selection.js").then(
+    (select) => select.default(keys, req)
+  );
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -14,8 +16,6 @@ const updateUser = async (keys: string[], req: Request) => {
       serverApi: ServerApiVersion.v1,
     } as MongoClientOptions);
 
-    const fields = selectFields(keys,req)
-    
     //console.log("Fields to editm and his values: ");
     //console.log(doc);
     //suscriber.next(doc);
