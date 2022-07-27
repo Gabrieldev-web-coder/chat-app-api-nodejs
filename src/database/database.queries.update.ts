@@ -11,13 +11,12 @@ const updateUser = async (keys: string[], req: Request) => {
   const userBody = decode(req.body.token, { complete: true });
   const payload = userBody.payload as JwtPayload;
   const { userid } = JSON.parse(payload.body);
-  console.log(userid);
 
   const selectFields = await import("../middlewares/fields.selection.js").then(
     (select) => select.default(keys, req)
   );
 
-  console.log(selectFields);
+  console.log(Object.keys(selectFields))
 
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
@@ -35,7 +34,7 @@ const updateUser = async (keys: string[], req: Request) => {
         .findOneAndUpdate(
           { "user.userid": userid },
           {
-            $set: { selectFields },
+            $set:{selectFields},
           }
         )
         .then((modify) => suscriber.next(modify))
