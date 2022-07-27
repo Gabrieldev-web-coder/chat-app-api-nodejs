@@ -35,7 +35,7 @@ const updateUser = async (keys: string[], req: Request) => {
         .findOneAndUpdate(
           { "user.userid": userid },
           {
-            $set: {},
+            $set: { selectFields },
           }
         )
         .then((modify) => suscriber.next(modify))
