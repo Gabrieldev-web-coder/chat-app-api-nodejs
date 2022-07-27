@@ -47,7 +47,6 @@ interface optionalFields {
   "user.picurl"?: string | undefined;
   "user.country"?: string | undefined;
   "user.description"?: string | undefined;
-  "user.token"?: string;
 }
 
 export { cred, userData, registerNewUser, loginResponse, optionalFields };
