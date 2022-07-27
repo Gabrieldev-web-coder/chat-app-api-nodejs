@@ -5,7 +5,10 @@ import { Observable } from "rxjs";
 
 dotenv.config();
 
-const updateUser = async (keys: string[], req: Request) => {
+const updateUser = async (
+  keys: string[],
+  req: Request
+): Promise<Observable<boolean>> => {
   const userid = await import("../middlewares/get.user.id.js").then((idFound) =>
     idFound.default(req)
   );
@@ -13,8 +16,6 @@ const updateUser = async (keys: string[], req: Request) => {
   const selectFields = await import("../middlewares/fields.selection.js").then(
     (select) => select.default(keys, req)
   );
-
-  console.log(selectFields)
 
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
@@ -24,7 +25,7 @@ const updateUser = async (keys: string[], req: Request) => {
     } as MongoClientOptions);
 
     client.connect(async (err) => {
-      if (err) suscriber.error(err);
+      if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
@@ -35,8 +36,8 @@ const updateUser = async (keys: string[], req: Request) => {
             $set: selectFields,
           }
         )
-        .then((modify) => suscriber.next(modify))
-        .catch((err) => suscriber.error(err));
+        .then((modify) => suscriber.next(modify.acknowledged))
+        .catch((err) => suscriber.error(err.name + " " + err.message));
       await client.close().finally(() => {
         suscriber.complete();
       });

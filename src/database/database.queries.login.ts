@@ -33,7 +33,7 @@ const checkUser = (req: Request): Observable<loginResponse> => {
             if (!users[0])
               suscriber.error("This user don't exist, consider register");
             const hashedPwd: string = users[0].user.pwd;
-            await verifyPwd(plainpwd, hashedPwd).then((value) => {
+            await verifyPwd(plainpwd, hashedPwd).then(async (value) => {
               if (value) {
                 delete users[0].user.pwd;
                 const body = JSON.stringify(users[0].user);
@@ -44,16 +44,17 @@ const checkUser = (req: Request): Observable<loginResponse> => {
                 const response: loginResponse = users[0].user;
                 response.token = tokenResponse;
                 suscriber.next(response);
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.complete();
+                });
               } else {
-                suscriber.error("Incorrect password.");
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.error("Incorrect password.");
+                  suscriber.complete();
+                });
               }
             });
           });
-        //.filter({
-        //  $and: [{ querySearch }, { queryPwd }],
-        //})
       } else {
         collection
           .find()
@@ -61,7 +62,7 @@ const checkUser = (req: Request): Observable<loginResponse> => {
           .toArray(async (err, users) => {
             if (err) suscriber.error(err);
             const hashedPwd: string = users[0].user.pwd;
-            await verifyPwd(plainpwd, hashedPwd).then((value) => {
+            await verifyPwd(plainpwd, hashedPwd).then(async (value) => {
               if (value) {
                 delete users[0].user.pwd;
                 const body = JSON.stringify(users[0].user);
@@ -72,10 +73,14 @@ const checkUser = (req: Request): Observable<loginResponse> => {
                 const response: loginResponse = users[0].user;
                 response.token = tokenResponse;
                 suscriber.next(response);
-                suscriber.complete();
+                await client.close().finally(()=>{
+                  suscriber.complete();
+                })
               } else {
-                suscriber.error("Incorrect password.");
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.error("Incorrect password.");
+                  suscriber.complete();
+                });
               }
             });
           });
