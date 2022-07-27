@@ -41,13 +41,13 @@ interface loginResponse {
 }
 
 interface optionalFields {
-  email?: string | undefined;
-  username?: string | undefined;
-  pwd?: string | undefined;
-  picurl?: string | undefined;
-  country?: string | undefined;
-  description?: string | undefined;
-  token?: string;
+  "user.email"?: string | undefined;
+  "user.username"?: string | undefined;
+  "user.pwd"?: string | undefined;
+  "user.picurl"?: string | undefined;
+  "user.country"?: string | undefined;
+  "user.description"?: string | undefined;
+  "user.token"?: string;
 }
 
 export { cred, userData, registerNewUser, loginResponse, optionalFields };
