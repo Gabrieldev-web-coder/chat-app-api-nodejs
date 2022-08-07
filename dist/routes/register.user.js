@@ -11,7 +11,7 @@ import { Router } from "express";
 import { validationResult, body } from "express-validator";
 import { registerUser } from "../database/database.queries.register.js";
 import { generateUser } from "../middlewares/generate.user.js";
-const register = Router().post("/register-user", body("email")
+const register = Router().post("/chat-api/v1.0/register-user", body("email")
     .isEmail()
     .isString()
     .exists({ checkNull: true, checkFalsy: true })
@@ -32,8 +32,8 @@ const register = Router().post("/register-user", body("email")
         const body = yield generateUser(req);
         registerUser(body)
             .subscribe({
-            next: (value) => res.status(200).json({ result: value }),
-            error: (err) => res.status(501).json({ errors: err })
+            next: (value) => res.status(201).json({ result: value }),
+            error: (err) => res.status(500).json({ errors: err })
         });
     }
 }));

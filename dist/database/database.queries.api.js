@@ -20,7 +20,7 @@ const checkUserApi = (userCredentials) => {
         });
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
-                suscriber.error(err.name + " " + err.message);
+                suscriber.error(err + " " + err.message);
             const collection = client
                 .db(process.env.DB_API)
                 .collection(process.env.DB_COLLECTION_API);

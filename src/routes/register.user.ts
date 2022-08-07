@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { validationResult, body } from "express-validator";
-import { Response, Request } from "express";
+
+import { Response,Request,Router } from "express";
+import { validationResult,body } from "express-validator";
 import { registerUser } from "../database/database.queries.register.js";
 import { generateUser } from "../middlewares/generate.user.js";
 
 const register = Router().post(
-  "/register-user",
+  "/chat-api/v1.0/register-user",
   body("email")
     .isEmail()
     .isString()
@@ -29,8 +29,8 @@ const register = Router().post(
       const body = await generateUser(req)
       registerUser(body)
       .subscribe({
-        next:(value) => res.status(200).json({result:value}),
-        error:(err) => res.status(501).json({errors:err})
+        next:(value) => res.status(201).json({result:value}),
+        error:(err) => res.status(500).json({errors:err})
       })
     }
   }

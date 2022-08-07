@@ -1,6 +1,6 @@
-
 interface cred {
-  username: string;
+  email?: string;
+  username?: string;
   pwd: string;
 }
 
@@ -19,8 +19,35 @@ interface registerNewUser {
   userid: number;
   picurl: string;
   country: string;
+  accountCreatedAt: string;
+  description: string;
+  profileModifiedAt: string;
   groups: string[];
   friends: string[];
 }
 
-export { cred, userData, registerNewUser };
+interface loginResponse {
+  token: string;
+  email: string;
+  username: string;
+  userid: number;
+  picurl: string;
+  country: string;
+  accountCreatedAt: string;
+  description: string;
+  profileModifiedAt: string;
+  groups: string[];
+  friends: string[];
+}
+
+interface optionalFields {
+  "user.email"?: string | undefined;
+  "user.username"?: string | undefined;
+  "user.pwd"?: string | undefined;
+  "user.picurl"?: string | undefined;
+  "user.country"?: string | undefined;
+  "user.description"?: string | undefined;
+  "user.lastMoficationAt"?: string | undefined;
+}
+
+export { cred, userData, registerNewUser, loginResponse, optionalFields };

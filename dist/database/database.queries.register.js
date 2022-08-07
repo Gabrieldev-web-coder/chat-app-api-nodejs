@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ServerApiVersion, } from "mongodb";
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
 import { generateToken } from "../jwt.auth/jwt.js";
@@ -25,6 +25,7 @@ const registerUser = (user) => {
             const collection = client
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
+<<<<<<< HEAD
             let checkingUser;
             collection.findOne({ user }).then((doc) => checkingUser = doc);
             console.log(checkingUser);
@@ -55,6 +56,47 @@ const registerUser = (user) => {
             else {
                 suscriber.error("This user already exist, consider login.");
             }
+=======
+            const { email, username } = user;
+            collection
+                .find()
+                .filter({
+                $or: [{ "user.email": email }, { "user.username": username }],
+            })
+                .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
+                if (err)
+                    suscriber.error(err.message);
+                if (docs.length === 0) {
+                    let token = null;
+                    let jwtErr = "";
+                    generateToken(JSON.stringify(user)).subscribe({
+                        next: (value) => (token = value),
+                    });
+                    yield collection
+                        .insertOne({ user })
+                        .catch((err) => {
+                        suscriber.error(err);
+                    })
+                        .then((value) => {
+                        if (!jwtErr) {
+                            suscriber.next({ saveResult: value, token: token });
+                        }
+                        else {
+                            suscriber.error("Error generating token: " + jwtErr);
+                        }
+                    });
+                    yield client.close().finally(() => {
+                        suscriber.complete();
+                    });
+                }
+                else {
+                    yield client.close().finally(() => {
+                        suscriber.error("Your username or email is already taken.");
+                        suscriber.complete();
+                    });
+                }
+            }));
+>>>>>>> routes_configuration
         }));
     });
 };

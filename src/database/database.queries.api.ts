@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion, MongoClientOptions } from "mongodb";
+import { ErrorDescription } from "mongodb";
 import { cred, userData } from "../schemas/cred.user.js";
-import { generateUser } from "../middlewares/generate.user.js";
 import { Observable } from "rxjs";
 import dotenv from "dotenv";
 
@@ -14,7 +14,7 @@ const checkUserApi = (userCredentials: cred) => {
       serverApi: ServerApiVersion.v1,
     } as MongoClientOptions);
     client.connect(async (err) => {
-      if (err) suscriber.error(err.name + " " + err.message);
+      if (err) suscriber.error(err + " " + err.message);
       const collection = client
         .db(process.env.DB_API)
         .collection(process.env.DB_COLLECTION_API);
