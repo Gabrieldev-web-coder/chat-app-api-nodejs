@@ -8,6 +8,10 @@ import {
   WithId,
 } from "mongodb";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const findUserById = (req: Request): Observable<WithId<Document>> => {
   const userId = req.query.id;
   return new Observable((suscriber) => {
