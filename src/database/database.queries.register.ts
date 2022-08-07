@@ -1,10 +1,7 @@
 import {
-  Document,
-  FindCursor,
   MongoClient,
   MongoClientOptions,
   ServerApiVersion,
-  WithId,
 } from "mongodb";
 
 import dotenv from "dotenv";
@@ -29,14 +26,12 @@ const registerUser = (user: registerNewUser) => {
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
       const { email, username } = user;
-      //Problems with search duplicated method and jwt generator
       collection
         .find()
         .filter({
           $or: [{ "user.email": email }, { "user.username": username }],
         })
         .toArray(async (err, docs) => {
-          console.log(docs);
           if (err) suscriber.error(err.message);
           if (docs.length === 0) {
             let token: string | null = null;
@@ -60,8 +55,10 @@ const registerUser = (user: registerNewUser) => {
               suscriber.complete();
             });
           } else {
-            suscriber.error("Your username or email is already taken.");
-            suscriber.complete();
+            await client.close().finally(()=>{
+              suscriber.error("Your username or email is already taken.");
+              suscriber.complete();
+            })
           }
         });
     });
