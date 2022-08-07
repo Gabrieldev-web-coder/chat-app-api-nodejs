@@ -4,7 +4,7 @@ import validateJwt from "../middlewares/check.jwt.js";
 import updateUserFields from "../middlewares/update.user.fields.js";
 
 const update = Router().put(
-  "/chatapiv1/update-user",
+  "/chat-api/v1.0/update-user",
   body("email")
     .optional(true)
     .isEmail()
