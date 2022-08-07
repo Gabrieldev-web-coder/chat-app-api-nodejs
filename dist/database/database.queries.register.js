@@ -26,14 +26,12 @@ const registerUser = (user) => {
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
             const { email, username } = user;
-            //Problems with search duplicated method and jwt generator
             collection
                 .find()
                 .filter({
                 $or: [{ "user.email": email }, { "user.username": username }],
             })
                 .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
-                console.log(docs);
                 if (err)
                     suscriber.error(err.message);
                 if (docs.length === 0) {
@@ -60,8 +58,10 @@ const registerUser = (user) => {
                     });
                 }
                 else {
-                    suscriber.error("Your username or email is already taken.");
-                    suscriber.complete();
+                    yield client.close().finally(() => {
+                        suscriber.error("Your username or email is already taken.");
+                        suscriber.complete();
+                    });
                 }
             }));
         }));
