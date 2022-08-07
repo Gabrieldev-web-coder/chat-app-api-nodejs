@@ -13,7 +13,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const findUserById = (req: Request): Observable<WithId<Document>> => {
-  const userId = req.query.id;
+  const userId = Number(req.query.id);
+  console.log(typeof userId, userId);
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -28,11 +29,11 @@ const findUserById = (req: Request): Observable<WithId<Document>> => {
       await collection
         .findOne({ "user.userid": userId })
         .then((user) => {
-          if (!user) {
-            suscriber.error("This user don't exist.");
+          if (user) {
+            delete user.pwd;
+            suscriber.next(user);
           }
-          delete user.pwd;
-          suscriber.next(user);
+          suscriber.error("This user don't exist.");
         })
         .catch((err) => {
           suscriber.error(err.message);

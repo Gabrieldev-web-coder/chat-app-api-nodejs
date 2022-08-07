@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion, } from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 import { Observable } from "rxjs";
 import { generateToken } from "../jwt.auth/jwt.js";
@@ -25,38 +25,6 @@ const registerUser = (user) => {
             const collection = client
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
-<<<<<<< HEAD
-            let checkingUser;
-            collection.findOne({ user }).then((doc) => checkingUser = doc);
-            console.log(checkingUser);
-            if (!checkingUser) {
-                let token = null;
-                let jwtErr = "";
-                generateToken(JSON.stringify(user)).subscribe({
-                    next: (value) => (token = value),
-                    error: (err) => (jwtErr = err),
-                });
-                yield collection
-                    .insertOne({ user })
-                    .catch((err) => {
-                    suscriber.error(err);
-                })
-                    .then((value) => {
-                    if (!jwtErr) {
-                        suscriber.next({ saveResult: value, token: token });
-                    }
-                    else {
-                        suscriber.error("Error generating token: " + jwtErr);
-                    }
-                });
-                yield client.close().finally(() => {
-                    suscriber.complete();
-                });
-            }
-            else {
-                suscriber.error("This user already exist, consider login.");
-            }
-=======
             const { email, username } = user;
             collection
                 .find()
@@ -96,7 +64,6 @@ const registerUser = (user) => {
                     });
                 }
             }));
->>>>>>> routes_configuration
         }));
     });
 };
