@@ -30,13 +30,28 @@ const findUserById = (req: Request): Observable<WithId<Document>> => {
         .findOne({ "user.userid": userId })
         .then((user) => {
           if (user) {
-            delete user.pwd;
-            suscriber.next(user);
+            delete user._id;
+            delete user.user.pwd;
+            suscriber.next(user.user);
+            client.close().finally(() => {
+              suscriber.complete();
+            });
           }
           suscriber.error("This user don't exist.");
+          client.close().finally(() => {
+            suscriber.complete();
+          });
         })
         .catch((err) => {
           suscriber.error(err.message);
+          client.close().finally(() => {
+            suscriber.complete();
+          });
+        })
+        .finally(() => {
+          client.close().finally(() => {
+            suscriber.complete();
+          });
         });
     });
   });
