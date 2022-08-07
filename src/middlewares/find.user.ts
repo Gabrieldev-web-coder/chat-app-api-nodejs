@@ -14,7 +14,6 @@ dotenv.config();
 
 const findUserById = (req: Request): Observable<WithId<Document>> => {
   const userId = Number(req.query.id);
-  console.log(typeof userId, userId);
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
       useNewUrlParser: true,
@@ -33,20 +32,11 @@ const findUserById = (req: Request): Observable<WithId<Document>> => {
             delete user._id;
             delete user.user.pwd;
             suscriber.next(user.user);
-            client.close().finally(() => {
-              suscriber.complete();
-            });
           }
           suscriber.error("This user don't exist.");
-          client.close().finally(() => {
-            suscriber.complete();
-          });
         })
         .catch((err) => {
           suscriber.error(err.message);
-          client.close().finally(() => {
-            suscriber.complete();
-          });
         })
         .finally(() => {
           client.close().finally(() => {
