@@ -15,9 +15,7 @@ const selectFields = (keys: string[], req: Request): optionalFields => {
   const query: any = {};
   for (let i = 0; i < entries.length; i++)
     query[prefixAdded[i]] = entriesValues[i];
-  query["user.profileModifiedAt"] = `Last modification at: ${moment().format(
-    "LLLL"
-  )}`;
+  query["user.lastMoficationAt"] = `${moment().format("LLLL")}`;
   return query;
 };
 
