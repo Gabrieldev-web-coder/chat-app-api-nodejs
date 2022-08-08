@@ -40,6 +40,8 @@ interface loginResponse {
   profileModifiedAt: string;
   groups: string[];
   friends: string[];
+  friendRequest: FriendRequest[];
+  pendingRequest: PendingRequest[];
 }
 
 interface optionalFields {
