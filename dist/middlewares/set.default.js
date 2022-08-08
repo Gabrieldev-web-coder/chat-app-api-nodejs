@@ -24,6 +24,8 @@ const setDefault = (req) => __awaiter(void 0, void 0, void 0, function* () {
         req.body.lastMoficationAt = "No changes yet.";
         req.body.groups = [];
         req.body.friends = [];
+        req.body.friendRequest = [];
+        req.body.pendingRequest = [];
         resolve(req.body);
     });
 });
