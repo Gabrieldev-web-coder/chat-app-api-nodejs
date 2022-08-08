@@ -24,6 +24,8 @@ interface registerNewUser {
   profileModifiedAt: string;
   groups: string[];
   friends: string[];
+  friendRequest: FriendRequest[];
+  pendingRequest: PendingRequest[];
 }
 
 interface loginResponse {
@@ -59,14 +61,22 @@ interface BasicUserInfo {
 }
 
 interface FriendRequest {
-  from: BasicUserInfo;
-  to: number;
+  from: BasicUserInfo | null;
+  to: number | null;
   accepted: boolean | null;
 }
 
 interface PendingRequest {
-  to: BasicUserInfo;
+  to: BasicUserInfo | null;
   pending: boolean | null;
 }
 
-export { cred, userData, registerNewUser, loginResponse, optionalFields, FriendRequest,PendingRequest };
+export {
+  cred,
+  userData,
+  registerNewUser,
+  loginResponse,
+  optionalFields,
+  FriendRequest,
+  PendingRequest,
+};
