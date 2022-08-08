@@ -24,6 +24,8 @@ interface registerNewUser {
   profileModifiedAt: string;
   groups: string[];
   friends: string[];
+  friendRequest: FriendRequest[];
+  pendingRequest: PendingRequest[];
 }
 
 interface loginResponse {
@@ -38,6 +40,8 @@ interface loginResponse {
   profileModifiedAt: string;
   groups: string[];
   friends: string[];
+  friendRequest: FriendRequest[];
+  pendingRequest: PendingRequest[];
 }
 
 interface optionalFields {
@@ -50,4 +54,31 @@ interface optionalFields {
   "user.lastMoficationAt"?: string | undefined;
 }
 
-export { cred, userData, registerNewUser, loginResponse, optionalFields };
+interface BasicUserInfo {
+  userid: number;
+  username: string;
+  country: string;
+  description: string;
+  urlpic: string;
+}
+
+interface FriendRequest {
+  from: BasicUserInfo | null;
+  to: number | null;
+  accepted: boolean | null;
+}
+
+interface PendingRequest {
+  to: BasicUserInfo | null;
+  pending: boolean | null;
+}
+
+export {
+  cred,
+  userData,
+  registerNewUser,
+  loginResponse,
+  optionalFields,
+  FriendRequest,
+  PendingRequest,
+};
