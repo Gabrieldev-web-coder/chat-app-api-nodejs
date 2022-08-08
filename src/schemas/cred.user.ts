@@ -50,4 +50,23 @@ interface optionalFields {
   "user.lastMoficationAt"?: string | undefined;
 }
 
-export { cred, userData, registerNewUser, loginResponse, optionalFields };
+interface BasicUserInfo {
+  userid: number;
+  username: string;
+  country: string;
+  description: string;
+  urlpic: string;
+}
+
+interface FriendRequest {
+  from: BasicUserInfo;
+  to: number;
+  accepted: boolean | null;
+}
+
+interface PendingRequest {
+  to: BasicUserInfo;
+  pending: boolean | null;
+}
+
+export { cred, userData, registerNewUser, loginResponse, optionalFields, FriendRequest,PendingRequest };
