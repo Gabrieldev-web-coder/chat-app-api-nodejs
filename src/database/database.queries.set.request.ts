@@ -1,10 +1,6 @@
-import { Observable } from "rxjs";
 import { FriendRequest } from "../schemas/cred.user.js";
 import { Request } from "express";
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
-import dotenv from "dotenv";
-
-dotenv.config();
+import mongoClient from "../services/client.service.js";
 
 const setPendingRequest = (req: Request): Promise<boolean> => {
   const userRequest = req.body as FriendRequest;
@@ -12,11 +8,7 @@ const setPendingRequest = (req: Request): Promise<boolean> => {
   const userInfo = { to: to, accepted: accepted };
   const { userid } = from;
   return new Promise((resolve, reject) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) reject(err.name + " " + err.message);
       const collection = client

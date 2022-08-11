@@ -1,19 +1,12 @@
 // import { Observable } from "rxjs";
 // import { FriendRequest } from "../schemas/cred.user.js";
 // import { Request } from "express";
-// import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
-// import dotenv from "dotenv";
-
-// dotenv.config();
+//import mongoClient from "../services/client.service.js";
 
 // const sendResponse = (req: Request): Observable<boolean> => {
 //   const userRequest = req.body as FriendRequest;
 //   return new Observable((suscriber) => {
-//     const client = new MongoClient(process.env.DB_URL, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//       serverApi: ServerApiVersion.v1,
-//     } as MongoClientOptions);
+//     const client = mongoClient
 //     client.connect(async (err) => {
 //       if (err) suscriber.error(err.name + " " + err.message);
 //       const collection = client

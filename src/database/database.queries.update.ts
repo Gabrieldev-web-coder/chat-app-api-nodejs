@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
 import { Request } from "express";
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import { Observable } from "rxjs";
-
-dotenv.config();
+import mongoClient from "../services/client.service.js";
 
 const updateUser = async (
   keys: string[],
@@ -18,12 +15,7 @@ const updateUser = async (
   );
 
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
-
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client

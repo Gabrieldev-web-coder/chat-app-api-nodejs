@@ -1,20 +1,11 @@
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
-
-import dotenv from "dotenv";
+import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
 import { registerNewUser } from "../schemas/cred.user.js";
 import { generateToken } from "../jwt.auth/jwt.js";
 
-dotenv.config();
-
 const registerUser = (user: registerNewUser) => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
-
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client

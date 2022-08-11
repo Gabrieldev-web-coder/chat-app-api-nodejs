@@ -1,20 +1,13 @@
+import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
 import { FriendRequest } from "../schemas/cred.user.js";
 import { Request } from "express";
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import setPendingRequest from "./database.queries.set.request.js";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const sendRequest = (req: Request): Observable<boolean> => {
   const userRequest = req.body as FriendRequest;
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
 

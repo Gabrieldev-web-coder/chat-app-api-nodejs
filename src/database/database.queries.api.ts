@@ -1,18 +1,10 @@
-import { MongoClient, ServerApiVersion, MongoClientOptions } from "mongodb";
-import { ErrorDescription } from "mongodb";
 import { cred, userData } from "../schemas/cred.user.js";
 import { Observable } from "rxjs";
-import dotenv from "dotenv";
-
-dotenv.config();
+import mongoClient from "../services/client.service.js";
 
 const checkUserApi = (userCredentials: cred) => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err + " " + err.message);
       const collection = client
@@ -37,11 +29,7 @@ const checkUserApi = (userCredentials: cred) => {
 
 const checkUser = (userCredentials: cred) => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
@@ -65,11 +53,7 @@ const checkUser = (userCredentials: cred) => {
 
 const saveDataUser = (userInfo: userData) => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
@@ -95,11 +79,7 @@ const saveDataUser = (userInfo: userData) => {
 
 const saveDataApiUser = (userInfo: userData) => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
