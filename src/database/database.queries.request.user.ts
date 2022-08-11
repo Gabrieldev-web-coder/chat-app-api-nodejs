@@ -19,6 +19,7 @@ const sendRequest = (req: Request): Observable<boolean> => {
       if (err) suscriber.error(err.name + " " + err.message);
 
       await setPendingRequest(req).then((settedPending) => {
+        console.log(settedPending);
         if (settedPending) {
           async () => {
             const collection = client
@@ -42,10 +43,10 @@ const sendRequest = (req: Request): Observable<boolean> => {
                   suscriber.complete();
                 });
               });
-          }
+          };
         }
-        suscriber.error("Cannot set request pending.")
-      })
+        suscriber.error("Cannot set request pending.");
+      });
     });
   });
 };

@@ -21,6 +21,8 @@ const setPendingRequest = (req: Request): Promise<boolean> => {
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
       const { userid } = userRequest.from;
+      delete userRequest.token;
+      delete userRequest.from;
       await collection
         .updateOne(
           { "user.userid": userid },
