@@ -8,7 +8,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const sendRequest = (req: Request): Observable<boolean> => {
-  const userRequestComplete = req.body as FriendRequest;
   const userRequest = req.body as FriendRequest;
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
@@ -25,10 +24,12 @@ const sendRequest = (req: Request): Observable<boolean> => {
         .collection(process.env.DB_COLLECTION_REGISTERED);
       const userid = userRequest.to;
       if (settendPending) {
+        delete userRequest.token;
+        delete userRequest.to;
         await collection
           .updateOne(
             { "user.userid": userid },
-            { $push: { "user.friendRequest": userRequestComplete } }
+            { $push: { "user.friendRequest": userRequest } }
           )
           .then((updateResponse) => {
             if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
