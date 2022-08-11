@@ -20,7 +20,12 @@ const userFriendRequest = Router().post(
       });
     } else {
       sendRequest(req).subscribe({
-        next: (success) => res.status(200).json({ message: success }),
+        next: (success) =>
+          res.status(200).json({
+            message: success
+              ? "Friend request sended successfully!"
+              : "We cannot send friend request, try later.",
+          }),
         error: (err) => res.status(501).json({ error: err }),
       });
     }
