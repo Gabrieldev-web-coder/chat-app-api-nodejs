@@ -3,20 +3,26 @@ import sendRequest from "../database/database.queries.request.user.js";
 import validateJwt from "../middlewares/check.jwt.js";
 import { validationResult, header, body } from "express-validator";
 
-
 const userFriendRequest = Router().post(
   "/chat-api/v1.0/friend-request",
-  body("token").exists({ checkNull: true, checkFalsy: true }).isJWT().custom(validateJwt),
-  header("Authorization"),
+  body("token")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isJWT()
+    .custom(validateJwt),
+  body("from").exists({ checkFalsy: true, checkNull: true }).isJSON(),
+  body("to").isNumeric().isLength({ min: 4 }),
+  body("accepted").exists({ checkNull: false }),
   (req, res) => {
     if (!validationResult(req).isEmpty()) {
-      res.status(401).json({ message: "No authorized", errors: validationResult(req).array() })
+      res.status(401).json({
+        message: "No authorized",
+        errors: validationResult(req).array(),
+      });
     } else {
-      sendRequest(req)
-        .subscribe({
-          next: (success) => res.status(200).json({ message: success ? "Friend request send successfully!" : "Cannot send friend request. Try later." }),
-          error: (err) => res.status(501).json({ error: err })
-        })
+      sendRequest(req).subscribe({
+        next: (success) => res.status(200).json({ message: success }),
+        error: (err) => res.status(501).json({ error: err }),
+      });
     }
   }
 );
