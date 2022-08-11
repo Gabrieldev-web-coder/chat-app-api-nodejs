@@ -31,9 +31,17 @@ const findUserById = (req: Request): Observable<WithId<Document>> => {
           if (user) {
             delete user._id;
             delete user.user.pwd;
+            delete user.user.groups;
+            delete user.user.friends;
+            delete user.user.friendRequest;
+            delete user.user.pendingRequest;
+            delete user.user.accountCreatedAt;
+            delete user.user.lastMoficationAt;
+
             suscriber.next(user.user);
+          } else {
+            suscriber.error("This user don't exist.");
           }
-          suscriber.error("This user don't exist.");
         })
         .catch((err) => {
           suscriber.error(err.message);
