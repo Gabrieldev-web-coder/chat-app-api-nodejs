@@ -7,6 +7,7 @@ import login from "./routes/login.users.js";
 import update from "./routes/update.user.js";
 import findUser from "./routes/find.users.js";
 import userFriendRequest from "./routes/send.request.users.js";
+import userFriendResponse from "./routes/response.request.users.js";
 
 dotenv.config();
 
@@ -27,5 +28,7 @@ app.use(update);
 app.use(findUser);
 
 app.use(userFriendRequest);
+
+app.use(userFriendResponse);
 
 app.listen(port, () => console.log("http://localhost:" + port));
