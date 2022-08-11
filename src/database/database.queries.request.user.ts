@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const sendRequest = (req: Request): Observable<boolean> => {
+  const userRequestComplete = req.body as FriendRequest;
   const userRequest = req.body as FriendRequest;
   return new Observable((suscriber) => {
     const client = new MongoClient(process.env.DB_URL, {
@@ -18,35 +19,29 @@ const sendRequest = (req: Request): Observable<boolean> => {
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
 
-      await setPendingRequest(req).then((settedPending) => {
-        console.log(settedPending);
-        if (settedPending) {
-          async () => {
-            const collection = client
-              .db(process.env.DB_REGISTER)
-              .collection(process.env.DB_COLLECTION_REGISTERED);
-
-            const userid = userRequest.to;
-            await collection
-              .updateOne(
-                { "user.userid": userid },
-                { $push: { "user.friendRequest": userRequest } }
-              )
-              .then((updateResponse) => {
-                if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
-              })
-              .catch((err) => {
-                suscriber.error(err.message + " " + err.name);
-              })
-              .finally(() => {
-                client.close().finally(() => {
-                  suscriber.complete();
-                });
-              });
-          };
-        }
-        suscriber.error("Cannot set request pending.");
-      });
+      const settendPending = await setPendingRequest(req).then((bool) => bool);
+      const collection = client
+        .db(process.env.DB_REGISTER)
+        .collection(process.env.DB_COLLECTION_REGISTERED);
+      const userid = userRequest.to;
+      if (settendPending) {
+        await collection
+          .updateOne(
+            { "user.userid": userid },
+            { $push: { "user.friendRequest": userRequestComplete } }
+          )
+          .then((updateResponse) => {
+            if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
+          })
+          .catch((err) => {
+            suscriber.error(err.message + " " + err.name);
+          })
+          .finally(() => {
+            client.close().finally(() => {
+              suscriber.complete();
+            });
+          });
+      }
     });
   });
 };
