@@ -81,4 +81,5 @@ export {
   optionalFields,
   FriendRequest,
   PendingRequest,
+  BasicUserInfo
 };
