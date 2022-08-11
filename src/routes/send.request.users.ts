@@ -9,7 +9,7 @@ const userFriendRequest = Router().post(
     .exists({ checkNull: true, checkFalsy: true })
     .isJWT()
     .custom(validateJwt),
-  body("from").exists({ checkFalsy: true, checkNull: true }).isJSON(),
+  body("from").exists({ checkFalsy: true, checkNull: true }),
   body("to").isNumeric().isLength({ min: 4 }),
   body("accepted").exists({ checkNull: false }),
   (req, res) => {

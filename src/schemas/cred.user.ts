@@ -63,6 +63,7 @@ interface BasicUserInfo {
 }
 
 interface FriendRequest {
+  token: string | null;
   from: BasicUserInfo | null;
   to: number | null;
   accepted: boolean | null;
@@ -81,5 +82,5 @@ export {
   optionalFields,
   FriendRequest,
   PendingRequest,
-  BasicUserInfo
+  BasicUserInfo,
 };
