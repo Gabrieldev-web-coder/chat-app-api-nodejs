@@ -12,6 +12,7 @@ const userFriendResponse = Router().post(
     .custom(validateJwt),
   body("id").isNumeric().exists({ checkNull: true, checkFalsy: true }),
   body("accepted").isBoolean().exists({ checkNull: false }),
+  body("emitterId").isNumeric().exists({ checkNull: true, checkFalsy: true }),
   (req, res) => {
     if (!validationResult(req).isEmpty()) {
       res.status(401).json({ errors: validationResult(req).array() });
