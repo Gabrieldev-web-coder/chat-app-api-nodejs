@@ -1,6 +1,9 @@
 import { Request } from "express";
 import { Observable } from "rxjs";
 import mongoClient from "../services/client.service.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const updateUser = async (
   keys: string[],

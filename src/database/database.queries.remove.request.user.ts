@@ -1,5 +1,8 @@
 import mongoClient from "../services/client.service";
 import { Request } from "express";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const removeUserRequest = (req: Request): Promise<boolean> => {
   return new Promise((resolve, reject) => {
@@ -10,7 +13,7 @@ const removeUserRequest = (req: Request): Promise<boolean> => {
       const collection = client;
       await collection
         .db(process.env.DB_REGISTER)
-        .collection(process.env.DB_COLLECTION_REGISTERED)
+        .collection(process.env.DB_COLLECTION_REGISTERED as string)
         .updateOne(
           { "user.userid": id },
           { $pull: { "user.friendRequest.?.to": emitterId } }

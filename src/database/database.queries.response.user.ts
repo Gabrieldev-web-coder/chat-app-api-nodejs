@@ -2,6 +2,9 @@ import { Observable } from "rxjs";
 import { Request } from "express";
 import removeUserRequest from "./database.queries.remove.request.user.js";
 import mongoClient from "../services/client.service.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const sendResponse = (req: Request): Observable<boolean> => {
   const { id, emitterId } = req.body;

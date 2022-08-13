@@ -1,6 +1,9 @@
 import { FriendRequest } from "../schemas/cred.user.js";
 import { Request } from "express";
 import mongoClient from "../services/client.service.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const setPendingRequest = (req: Request): Promise<boolean> => {
   const userRequest = req.body as FriendRequest;

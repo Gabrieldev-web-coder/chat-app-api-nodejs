@@ -4,6 +4,9 @@ import { Observable } from "rxjs";
 import verifyPwd from "../middlewares/verify.password.js";
 import { generateToken } from "../jwt.auth/jwt.js";
 import { loginResponse } from "../schemas/cred.user.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const checkUser = (req: Request): Observable<loginResponse> => {
   return new Observable((suscriber) => {

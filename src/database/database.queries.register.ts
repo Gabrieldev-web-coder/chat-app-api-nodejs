@@ -2,6 +2,9 @@ import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
 import { registerNewUser } from "../schemas/cred.user.js";
 import { generateToken } from "../jwt.auth/jwt.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const registerUser = (user: registerNewUser) => {
   return new Observable((suscriber) => {

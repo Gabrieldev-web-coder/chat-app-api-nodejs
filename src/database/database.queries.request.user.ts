@@ -3,6 +3,9 @@ import { Observable } from "rxjs";
 import { FriendRequest } from "../schemas/cred.user.js";
 import { Request } from "express";
 import setPendingRequest from "./database.queries.set.request.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const sendRequest = (req: Request): Observable<boolean> => {
   const userRequest = req.body as FriendRequest;
