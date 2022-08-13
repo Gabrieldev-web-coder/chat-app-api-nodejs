@@ -7,17 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion } from "mongodb";
 import { Observable } from "rxjs";
-import dotenv from "dotenv";
-dotenv.config();
+import mongoClient from "../services/client.service.js";
 const checkUserApi = (userCredentials) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverApi: ServerApiVersion.v1,
-        });
+        const client = mongoClient;
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 suscriber.error(err + " " + err.message);
@@ -42,11 +36,7 @@ const checkUserApi = (userCredentials) => {
 };
 const checkUser = (userCredentials) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverApi: ServerApiVersion.v1,
-        });
+        const client = mongoClient;
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 suscriber.error(err.name + " " + err.message);
@@ -70,11 +60,7 @@ const checkUser = (userCredentials) => {
 };
 const saveDataUser = (userInfo) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverApi: ServerApiVersion.v1,
-        });
+        const client = mongoClient;
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 suscriber.error(err.name + " " + err.message);
@@ -99,11 +85,7 @@ const saveDataUser = (userInfo) => {
 };
 const saveDataApiUser = (userInfo) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverApi: ServerApiVersion.v1,
-        });
+        const client = mongoClient;
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 suscriber.error(err.name + " " + err.message);

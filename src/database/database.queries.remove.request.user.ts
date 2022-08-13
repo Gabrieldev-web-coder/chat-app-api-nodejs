@@ -1,4 +1,4 @@
-import mongoClient from "../services/client.service";
+import mongoClient from "../services/client.service.js";
 import { Request } from "express";
 import dotenv from "dotenv";
 
@@ -16,7 +16,7 @@ const removeUserRequest = (req: Request): Promise<boolean> => {
         .collection(process.env.DB_COLLECTION_REGISTERED as string)
         .updateOne(
           { "user.userid": id },
-          { $pull: { "user.friendRequest.?.to": emitterId } }
+          { $pull: { "user.friendRequest.$.to": emitterId } }
         )
         .then((update) => {
           update.acknowledged.valueOf() ? resolve(true) : resolve(false);

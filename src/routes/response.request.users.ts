@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { validationResult, body, header } from "express-validator";
-import validateJwt from "../middlewares/check.jwt";
+import validateJwt from "../middlewares/check.jwt.js";
+import sendResponse from "../database/database.queries.response.user.js";
 
 const userFriendResponse = Router().post(
   "/chat-api/v1.0/friend-response",
@@ -17,7 +18,15 @@ const userFriendResponse = Router().post(
     if (!validationResult(req).isEmpty()) {
       res.status(401).json({ errors: validationResult(req).array() });
     } else {
-      //...
+      sendResponse(req).subscribe({
+        next: (updated) =>
+          res.status(200).json({
+            message: updated
+              ? "Your friend request was accepted!"
+              : "Your friend request was rejected.",
+          }),
+        error: (err) => res.status(501).json({ errors: err }),
+      });
     }
   }
 );
