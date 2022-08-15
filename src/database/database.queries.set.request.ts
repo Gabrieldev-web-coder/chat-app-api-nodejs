@@ -1,4 +1,5 @@
 import { FriendRequest } from "../schemas/cred.user.js";
+import { PendingRequest } from "../schemas/cred.user.js";
 import { Request } from "express";
 import mongoClient from "../services/client.service.js";
 import dotenv from "dotenv";
@@ -8,8 +9,12 @@ dotenv.config();
 const setPendingRequest = (req: Request): Promise<boolean> => {
   const userRequest = req.body as FriendRequest;
   const { to, accepted, from } = userRequest;
-  const userInfo = { to: to, accepted: accepted };
   const { userid } = from;
+  const userInfo: PendingRequest = {
+    from: userid,
+    to: to,
+    accepted: accepted,
+  };
   return new Promise((resolve, reject) => {
     const client = mongoClient;
     client.connect(async (err) => {

@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const sendResponse = (req: Request): Observable<boolean> => {
+const sendResponse = (req: Request): Observable<any> => {
   const { id, emitterId, accepted } = req.body;
   return new Observable((suscriber) => {
     const client = mongoClient;
@@ -23,8 +23,8 @@ const sendResponse = (req: Request): Observable<boolean> => {
       if (removedFromPending) {
         await collection
           .updateOne(
-            { "user.friendRequest.$.from.userid": emitterId },
-            { $set: { "user.friendRequest.$.accepted": accepted } }
+            { "user.pendingRequest.$.to": emitterId },
+            { $set: { "user.pendingRequest.$.accepted": accepted } }
           )
           .then((updateResponse) => {
             console.log(updateResponse);

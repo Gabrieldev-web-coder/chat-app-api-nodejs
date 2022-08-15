@@ -15,8 +15,8 @@ const removeUserRequest = (req: Request): Promise<any> => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED as string)
         .updateOne(
-          { "user.pendingRequest.$.to": id },
-          { $set: { "user.pendingRequest.$.accepted": accepted } }
+          { "user.friendgRequest.$.from.userid": id },
+          { $set: { "user.friendgRequest.$.accepted": accepted } }
         )
         .then(async (update) => {
           resolve(update.acknowledged.valueOf());

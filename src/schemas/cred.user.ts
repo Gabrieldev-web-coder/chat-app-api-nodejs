@@ -71,8 +71,8 @@ interface FriendRequest {
 
 interface PendingRequest {
   from: number | null;
-  to: BasicUserInfo | null;
-  pending: boolean | null;
+  to: number | null;
+  accepted: boolean | null;
 }
 
 export {
