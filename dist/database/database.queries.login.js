@@ -7,19 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion } from "mongodb";
+import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
-import dotenv from "dotenv";
 import verifyPwd from "../middlewares/verify.password.js";
 import { generateToken } from "../jwt.auth/jwt.js";
+import dotenv from "dotenv";
 dotenv.config();
 const checkUser = (req) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverApi: ServerApiVersion.v1,
-        });
+        const client = mongoClient;
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 suscriber.error(err.message + " " + err.name);
@@ -39,7 +35,7 @@ const checkUser = (req) => {
                     if (!users[0])
                         suscriber.error("This user don't exist, consider register");
                     const hashedPwd = users[0].user.pwd;
-                    yield verifyPwd(plainpwd, hashedPwd).then((value) => {
+                    yield verifyPwd(plainpwd, hashedPwd).then((value) => __awaiter(void 0, void 0, void 0, function* () {
                         if (value) {
                             delete users[0].user.pwd;
                             const body = JSON.stringify(users[0].user);
@@ -50,17 +46,18 @@ const checkUser = (req) => {
                             const response = users[0].user;
                             response.token = tokenResponse;
                             suscriber.next(response);
-                            suscriber.complete();
+                            yield client.close().finally(() => {
+                                suscriber.complete();
+                            });
                         }
                         else {
-                            suscriber.error("Incorrect password.");
-                            suscriber.complete();
+                            yield client.close().finally(() => {
+                                suscriber.error("Incorrect password.");
+                                suscriber.complete();
+                            });
                         }
-                    });
+                    }));
                 }));
-                //.filter({
-                //  $and: [{ querySearch }, { queryPwd }],
-                //})
             }
             else {
                 collection
@@ -70,7 +67,7 @@ const checkUser = (req) => {
                     if (err)
                         suscriber.error(err);
                     const hashedPwd = users[0].user.pwd;
-                    yield verifyPwd(plainpwd, hashedPwd).then((value) => {
+                    yield verifyPwd(plainpwd, hashedPwd).then((value) => __awaiter(void 0, void 0, void 0, function* () {
                         if (value) {
                             delete users[0].user.pwd;
                             const body = JSON.stringify(users[0].user);
@@ -81,13 +78,17 @@ const checkUser = (req) => {
                             const response = users[0].user;
                             response.token = tokenResponse;
                             suscriber.next(response);
-                            suscriber.complete();
+                            yield client.close().finally(() => {
+                                suscriber.complete();
+                            });
                         }
                         else {
-                            suscriber.error("Incorrect password.");
-                            suscriber.complete();
+                            yield client.close().finally(() => {
+                                suscriber.error("Incorrect password.");
+                                suscriber.complete();
+                            });
                         }
-                    });
+                    }));
                 }));
             }
         }));

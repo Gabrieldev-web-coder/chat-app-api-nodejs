@@ -20,6 +20,8 @@ const setDefault = async (req: Request): Promise<registerNewUser> => {
     req.body.lastMoficationAt = "No changes yet.";
     req.body.groups = [];
     req.body.friends = [];
+    req.body.friendRequest = [];
+    req.body.pendingRequest = [];
     resolve(req.body);
   });
 };

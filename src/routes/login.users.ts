@@ -3,7 +3,7 @@ import { validationResult, body } from "express-validator";
 import checkUser from "../database/database.queries.login.js";
 
 const login = Router().post(
-  "/chatapiv1/login-user",
+  "/chat-api/v1.0/login-user",
   body("username").isString().isLength({ min: 4 }).optional(true),
   body("email").isString().isEmail().normalizeEmail().optional(true),
   body("pwd")

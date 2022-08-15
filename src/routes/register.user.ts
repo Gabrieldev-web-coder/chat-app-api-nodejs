@@ -5,7 +5,7 @@ import { registerUser } from "../database/database.queries.register.js";
 import { generateUser } from "../middlewares/generate.user.js";
 
 const register = Router().post(
-  "/chatapiv1/register-user",
+  "/chat-api/v1.0/register-user",
   body("email")
     .isEmail()
     .isString()

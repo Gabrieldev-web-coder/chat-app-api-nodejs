@@ -1,27 +1,14 @@
-import {
-  Document,
-  FindCursor,
-  MongoClient,
-  MongoClientOptions,
-  ServerApiVersion,
-  WithId,
-} from "mongodb";
-
-import dotenv from "dotenv";
+import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
 import { registerNewUser } from "../schemas/cred.user.js";
 import { generateToken } from "../jwt.auth/jwt.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const registerUser = (user: registerNewUser) => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
-
+    const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
@@ -29,14 +16,12 @@ const registerUser = (user: registerNewUser) => {
         .collection(process.env.DB_COLLECTION_REGISTERED);
 
       const { email, username } = user;
-      //Problems with search duplicated method and jwt generator
       collection
         .find()
         .filter({
           $or: [{ "user.email": email }, { "user.username": username }],
         })
         .toArray(async (err, docs) => {
-          console.log(docs);
           if (err) suscriber.error(err.message);
           if (docs.length === 0) {
             let token: string | null = null;
@@ -60,8 +45,10 @@ const registerUser = (user: registerNewUser) => {
               suscriber.complete();
             });
           } else {
-            suscriber.error("Your username or email is already taken.");
-            suscriber.complete();
+            await client.close().finally(() => {
+              suscriber.error("Your username or email is already taken.");
+              suscriber.complete();
+            });
           }
         });
     });

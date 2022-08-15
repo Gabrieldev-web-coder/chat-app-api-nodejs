@@ -7,18 +7,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { MongoClient, ServerApiVersion, } from "mongodb";
-import dotenv from "dotenv";
+import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
 import { generateToken } from "../jwt.auth/jwt.js";
+import dotenv from "dotenv";
 dotenv.config();
 const registerUser = (user) => {
     return new Observable((suscriber) => {
-        const client = new MongoClient(process.env.DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverApi: ServerApiVersion.v1,
-        });
+        const client = mongoClient;
         client.connect((err) => __awaiter(void 0, void 0, void 0, function* () {
             if (err)
                 suscriber.error(err.name + " " + err.message);
@@ -26,14 +22,12 @@ const registerUser = (user) => {
                 .db(process.env.DB_REGISTER)
                 .collection(process.env.DB_COLLECTION_REGISTERED);
             const { email, username } = user;
-            //Problems with search duplicated method and jwt generator
             collection
                 .find()
                 .filter({
                 $or: [{ "user.email": email }, { "user.username": username }],
             })
                 .toArray((err, docs) => __awaiter(void 0, void 0, void 0, function* () {
-                console.log(docs);
                 if (err)
                     suscriber.error(err.message);
                 if (docs.length === 0) {
@@ -60,8 +54,10 @@ const registerUser = (user) => {
                     });
                 }
                 else {
-                    suscriber.error("Your username or email is already taken.");
-                    suscriber.complete();
+                    yield client.close().finally(() => {
+                        suscriber.error("Your username or email is already taken.");
+                        suscriber.complete();
+                    });
                 }
             }));
         }));

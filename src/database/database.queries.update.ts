@@ -1,43 +1,42 @@
-import dotenv from "dotenv";
 import { Request } from "express";
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
 import { Observable } from "rxjs";
+import mongoClient from "../services/client.service.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const updateUser = async (keys: string[], req: Request) => {
+const updateUser = async (
+  keys: string[],
+  req: Request
+): Promise<Observable<boolean>> => {
+  const userid = await import("../middlewares/get.user.id.js").then((idFound) =>
+    idFound.default(req)
+  );
+
+  const selectFields = await import("../middlewares/fields.selection.js").then(
+    (select) => select.default(keys, req)
+  );
+
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
-
-    //let doc: any = {};
-
-    //for (let i = 0; i < keys.length; i++) doc[keys[i]] = req.body[keys[i]];
-
-    //delete doc.token
-
-    //Made all this in a single function apart...
-
-    //console.log("Fields to editm and his values: ");
-    //console.log(doc);
-    //suscriber.next(doc);
-
-    // client.connect(async (err) => {
-    //   if (err) suscriber.error(err);
-    //   const collection = client
-    //     .db(process.env.DB_REGISTER)
-    //     .collection(process.env.DB_COLLECTION_REGISTERED);
-    //   await collection
-    //     .findOneAndUpdate({}, {}) //Quering and update doc of user
-    //     .then((modify) => suscriber.next(modify))
-    //     .catch((err) => suscriber.error(err));
-    //   await client.close().finally(() => {
-    //     suscriber.complete();
-    //   });
-    // });
+    const client = mongoClient;
+    client.connect(async (err) => {
+      if (err) suscriber.error(err.name + " " + err.message);
+      const collection = client
+        .db(process.env.DB_REGISTER)
+        .collection(process.env.DB_COLLECTION_REGISTERED);
+      await collection
+        .updateOne(
+          { "user.userid": userid },
+          {
+            $set: selectFields,
+          }
+        )
+        .then((modify) => suscriber.next(modify.acknowledged))
+        .catch((err) => suscriber.error(err.name + " " + err.message));
+      await client.close().finally(() => {
+        suscriber.complete();
+      });
+    });
   });
 };
 

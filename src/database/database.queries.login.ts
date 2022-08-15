@@ -1,20 +1,16 @@
-import { MongoClient, MongoClientOptions, ServerApiVersion } from "mongodb";
+import mongoClient from "../services/client.service.js";
 import { Request } from "express";
 import { Observable } from "rxjs";
-import dotenv from "dotenv";
 import verifyPwd from "../middlewares/verify.password.js";
 import { generateToken } from "../jwt.auth/jwt.js";
 import { loginResponse } from "../schemas/cred.user.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const checkUser = (req: Request): Observable<loginResponse> => {
   return new Observable((suscriber) => {
-    const client = new MongoClient(process.env.DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverApi: ServerApiVersion.v1,
-    } as MongoClientOptions);
+    const client = mongoClient;
 
     client.connect(async (err) => {
       if (err) suscriber.error(err.message + " " + err.name);
@@ -33,7 +29,7 @@ const checkUser = (req: Request): Observable<loginResponse> => {
             if (!users[0])
               suscriber.error("This user don't exist, consider register");
             const hashedPwd: string = users[0].user.pwd;
-            await verifyPwd(plainpwd, hashedPwd).then((value) => {
+            await verifyPwd(plainpwd, hashedPwd).then(async (value) => {
               if (value) {
                 delete users[0].user.pwd;
                 const body = JSON.stringify(users[0].user);
@@ -44,16 +40,17 @@ const checkUser = (req: Request): Observable<loginResponse> => {
                 const response: loginResponse = users[0].user;
                 response.token = tokenResponse;
                 suscriber.next(response);
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.complete();
+                });
               } else {
-                suscriber.error("Incorrect password.");
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.error("Incorrect password.");
+                  suscriber.complete();
+                });
               }
             });
           });
-        //.filter({
-        //  $and: [{ querySearch }, { queryPwd }],
-        //})
       } else {
         collection
           .find()
@@ -61,7 +58,7 @@ const checkUser = (req: Request): Observable<loginResponse> => {
           .toArray(async (err, users) => {
             if (err) suscriber.error(err);
             const hashedPwd: string = users[0].user.pwd;
-            await verifyPwd(plainpwd, hashedPwd).then((value) => {
+            await verifyPwd(plainpwd, hashedPwd).then(async (value) => {
               if (value) {
                 delete users[0].user.pwd;
                 const body = JSON.stringify(users[0].user);
@@ -72,10 +69,14 @@ const checkUser = (req: Request): Observable<loginResponse> => {
                 const response: loginResponse = users[0].user;
                 response.token = tokenResponse;
                 suscriber.next(response);
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.complete();
+                });
               } else {
-                suscriber.error("Incorrect password.");
-                suscriber.complete();
+                await client.close().finally(() => {
+                  suscriber.error("Incorrect password.");
+                  suscriber.complete();
+                });
               }
             });
           });
