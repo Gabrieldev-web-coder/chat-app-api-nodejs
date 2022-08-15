@@ -69,6 +69,7 @@ interface FriendRequest {
 }
 
 interface PendingRequest {
+  from: number | null;
   to: BasicUserInfo | null;
   pending: boolean | null;
 }
@@ -81,5 +82,5 @@ export {
   optionalFields,
   FriendRequest,
   PendingRequest,
-  BasicUserInfo
+  BasicUserInfo,
 };
