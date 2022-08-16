@@ -19,26 +19,28 @@ const sendResponse = (req: Request): Observable<any> => {
       const removedFromPending = await removeUserRequest(req).then(
         (updated) => updated
       );
+      console.log(removedFromPending);
+      return removedFromPending;
 
-      if (removedFromPending) {
-        await collection
-          .updateOne(
-            { "user.pendingRequest.$.to": emitterId },
-            { $set: { "user.pendingRequest.$.accepted": accepted } }
-          )
-          .then((updateResponse) => {
-            console.log(updateResponse);
-            if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
-          })
-          .catch((err) => {
-            suscriber.error(err.message + " " + err.name);
-          })
-          .finally(() => {
-            client.close().finally(() => {
-              suscriber.complete();
-            });
-          });
-      }
+      // if (removedFromPending) {
+      //   await collection
+      //     .updateOne(
+      //       { "user.pendingRequest.$.to": emitterId },
+      //       { $set: { "user.pendingRequest.$.accepted": accepted } }
+      //     )
+      //     .then((updateResponse) => {
+      //       console.log(updateResponse);
+      //       if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
+      //     })
+      //     .catch((err) => {
+      //       suscriber.error(err.message + " " + err.name);
+      //     })
+      //     .finally(() => {
+      //       client.close().finally(() => {
+      //         suscriber.complete();
+      //       });
+      //     });
+      // }
     });
   });
 };
