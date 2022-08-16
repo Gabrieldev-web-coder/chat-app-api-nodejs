@@ -64,7 +64,7 @@ interface BasicUserInfo {
 
 interface FriendRequest {
   token: string | null;
-  from: BasicUserInfo | null;
+  from: number | null;
   to: number | null;
   accepted: boolean | null;
 }
