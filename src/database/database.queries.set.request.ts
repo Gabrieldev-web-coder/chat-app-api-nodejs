@@ -9,9 +9,8 @@ dotenv.config();
 const setPendingRequest = (req: Request): Promise<boolean> => {
   const userRequest = req.body as FriendRequest;
   const { to, accepted, from } = userRequest;
-  const { userid } = from;
   const userInfo: PendingRequest = {
-    from: userid,
+    from: from,
     to: to,
     accepted: accepted,
   };
@@ -24,7 +23,7 @@ const setPendingRequest = (req: Request): Promise<boolean> => {
         .collection(process.env.DB_COLLECTION_REGISTERED);
       await collection
         .updateOne(
-          { "user.userid": userid },
+          { "user.userid": from },
           { $push: { "user.pendingRequest": userInfo } }
         )
         .then((updateResponse) => {

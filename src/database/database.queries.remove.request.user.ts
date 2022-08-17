@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const removeUserRequest = (req: Request): Promise<any> => {
+const removeUserRequest = (req: Request): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     const client = mongoClient;
     const { id, emitterId, accepted } = req.body;
@@ -15,11 +15,16 @@ const removeUserRequest = (req: Request): Promise<any> => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED as string)
         .updateOne(
-          { "user.userid": id, "user.friendRequest.$.from": id },
+          {
+            $and: [
+              { "user.userid": emitterId },
+              { "user.friendRequest": { $elemMatch: { from: id } } },
+            ],
+          },
           { $set: { "user.friendRequest.$.accepted": accepted } }
         )
         .then(async (update) => {
-          resolve(update);
+          resolve(update.acknowledged.valueOf());
         })
         .catch((err) => {
           reject(err.message);
