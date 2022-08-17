@@ -21,5 +21,9 @@ app.use(update);
 app.use(findUser);
 app.use(userFriendRequest);
 app.use(userFriendResponse);
+app.use(express.static("src"));
+app.get("/saludo-de-gabriel", (req, res) => {
+    res.sendFile(process.cwd() + "/src/ja.html");
+});
 app.listen(port, () => console.log("http://localhost:" + port));
 //# sourceMappingURL=app.js.map

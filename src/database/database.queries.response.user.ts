@@ -24,8 +24,8 @@ const sendResponse = (req: Request): Observable<any> => {
           .updateOne(
             {
               $and: [
-                { "user.pendingRequest.$.to": emitterId },
-                { "user.pendingRequest.$.from": id },
+                { "user.pendingRequest": { $elemMatch: { to: emitterId } } },
+                { "user.userid": id },
               ],
             },
             { $set: { "user.pendingRequest.$.accepted": accepted } }
