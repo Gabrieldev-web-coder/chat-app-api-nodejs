@@ -17,17 +17,17 @@ const removePendingUser = (
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED as string);
-      if (type === "Pending request") {
+      if (type === "Friend request") {
         await collection
           .updateOne(
             {
               $and: [
                 { "user.userid": emitterId },
-                { "user.pendingRequest": { $elemMatch: { to: id } } },
+                { "user.friendRequest": { $elemMatch: { from: id } } },
               ],
             },
             {
-              $unset: { "user.pendingRequest": { $elemMatch: { to: id } } },
+              $unset: { "user.friendRequest": { $elemMatch: { from: id } } },
             }
           )
           .then((update) => {
@@ -38,18 +38,18 @@ const removePendingUser = (
           .catch((err) => {
             suscriber.error(err.message);
           });
-      } else if (type === "Friend request") {
+      } else if (type === "Pending request") {
         await collection
           .updateOne(
             {
               $and: [
                 { "user.userid": emitterId },
-                { "user.friendRequest": { $elemMatch: { from: id } } },
+                { "user.pendingRequest": { $elemMatch: { from: id } } },
               ],
             },
             {
               $unset: {
-                "user.friendRequest": { $elemMatch: { from: id } },
+                "user.pendingRequest": { $elemMatch: { from: id } },
               },
             }
           )

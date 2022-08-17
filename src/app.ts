@@ -8,7 +8,7 @@ import update from "./routes/update.user.js";
 import findUser from "./routes/find.users.js";
 import userFriendRequest from "./routes/send.request.users.js";
 import userFriendResponse from "./routes/response.request.users.js";
-import removePending from "./routes/response.request.users.js";
+import removePending from "./routes/remove.pending.users.js";
 
 dotenv.config();
 

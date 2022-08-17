@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Router } from "express";
 import { validationResult, body } from "express-validator";
-import { registerUser } from "../database/database.queries.register.js";
+import { registerUser } from "../database/db.qr.register.js";
 import { generateUser } from "../middlewares/generate.user.js";
 const register = Router().post("/chat-api/v1.0/register-user", body("email")
     .isEmail()
@@ -30,10 +30,9 @@ const register = Router().post("/chat-api/v1.0/register-user", body("email")
     }
     else {
         const body = yield generateUser(req);
-        registerUser(body)
-            .subscribe({
+        registerUser(body).subscribe({
             next: (value) => res.status(201).json({ result: value }),
-            error: (err) => res.status(500).json({ errors: err })
+            error: (err) => res.status(500).json({ errors: err }),
         });
     }
 }));

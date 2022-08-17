@@ -8,6 +8,7 @@ import update from "./routes/update.user.js";
 import findUser from "./routes/find.users.js";
 import userFriendRequest from "./routes/send.request.users.js";
 import userFriendResponse from "./routes/response.request.users.js";
+import removePending from "./routes/remove.pending.users.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -19,11 +20,8 @@ app.use(register);
 app.use(login);
 app.use(update);
 app.use(findUser);
+app.use(removePending);
 app.use(userFriendRequest);
 app.use(userFriendResponse);
-app.use(express.static("src"));
-app.get("/saludo-de-gabriel", (req, res) => {
-    res.sendFile(process.cwd() + "/src/ja.html");
-});
 app.listen(port, () => console.log("http://localhost:" + port));
 //# sourceMappingURL=app.js.map

@@ -3,7 +3,7 @@ import { validationResult, body, header } from "express-validator";
 import validateJwt from "../middlewares/check.jwt.js";
 import removePendingUser from "../database/db.qr.remove.pending.js";
 const removePending = Router().post(
-  "/chat-api/v1.0/friend-response",
+  "/chat-api/v1.0/remove-pending",
   header("Authorization"),
   body("token")
     .isJWT()
