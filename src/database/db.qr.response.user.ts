@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { Request } from "express";
-import removeUserRequest from "./db.qri.remove.request.user.js";
+import removeUserRequest from "./db.qr.remove.request.user.js";
 import mongoClient from "../services/client.service.js";
 import dotenv from "dotenv";
 
