@@ -10,7 +10,6 @@ const setPendingRequest = (req: Request): Promise<boolean> => {
   const userRequest = req.body as FriendRequest;
   const { to, accepted, from } = userRequest;
   const userInfo: PendingRequest = {
-    from: from,
     to: to,
     accepted: accepted,
   };
