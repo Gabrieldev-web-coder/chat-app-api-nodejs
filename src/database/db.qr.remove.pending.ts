@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const removePending = (req: Request, type: string): Observable<Boolean> => {
+const removePendingUser = (req: Request, type: string): Observable<Boolean> => {
   return new Observable((suscriber) => {
     const client = mongoClient;
     client.connect(async (err) => {
@@ -18,4 +18,4 @@ const removePending = (req: Request, type: string): Observable<Boolean> => {
   });
 };
 
-export default removePending;
+export default removePendingUser;
