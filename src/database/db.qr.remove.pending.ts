@@ -11,7 +11,7 @@ const removePendingUser = (
 ): Observable<Boolean | string> => {
   return new Observable((suscriber) => {
     const client = mongoClient;
-    const { id, emitterId, accepted } = req.body;
+    const { id, emitterId } = req.body;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
@@ -27,7 +27,9 @@ const removePendingUser = (
               ],
             },
             {
-              $unset: { "user.friendRequest": { $elemMatch: { from: id } } },
+              $pull: {
+                "user.friendRequest": {},
+              },
             }
           )
           .then((update) => {
@@ -44,12 +46,12 @@ const removePendingUser = (
             {
               $and: [
                 { "user.userid": emitterId },
-                { "user.pendingRequest": { $elemMatch: { from: id } } },
+                { "user.pendingRequest": { $elemMatch: { to: id } } },
               ],
             },
             {
-              $unset: {
-                "user.pendingRequest": { $elemMatch: { from: id } },
+              $pull: {
+                "user.pendingRequest": {},
               },
             }
           )

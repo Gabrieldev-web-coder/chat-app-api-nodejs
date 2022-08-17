@@ -11,7 +11,6 @@ const removePending = Router().post(
     .exists({ checkNull: true, checkFalsy: true })
     .custom(validateJwt),
   body("id").isNumeric().exists({ checkNull: true, checkFalsy: true }),
-  body("accepted").isBoolean().exists({ checkNull: false }),
   body("emitterId").isNumeric().exists({ checkNull: true, checkFalsy: true }),
   body("type").isString().exists({ checkNull: true, checkFalsy: true }),
   (req: Request, res: Response) => {
@@ -23,7 +22,7 @@ const removePending = Router().post(
         next: (val) =>
           val
             ? res.status(200).json({
-                message: `User: ${id} removed successfully from your ${type} list`,
+                message: `User ${id} removed successfully from your ${type} list`,
               })
             : res.status(501).json({
                 error: `Something went wrong removing this ${type} from your list`,
