@@ -12,7 +12,7 @@ const removePending = (req: Request, type: string): Observable<Boolean> => {
       if (err) suscriber.error(err.name + " " + err.message);
       const collection = client
         .db(process.env.DB_REGISTER)
-        .collection(process.env.DB_COLLECTION_REGISTERED);
+        .collection(process.env.DB_COLLECTION_REGISTERED as string);
       //Some stuff...
     });
   });
