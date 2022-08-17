@@ -70,7 +70,6 @@ interface FriendRequest {
 }
 
 interface PendingRequest {
-  from: number | null;
   to: number | null;
   accepted: boolean | null;
 }
