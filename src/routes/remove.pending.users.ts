@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { validationResult, body, header } from "express-validator";
 import validateJwt from "../middlewares/check.jwt.js";
 import removePendingUser from "../database/db.qr.remove.pending.js";
@@ -14,7 +14,7 @@ const removePending = Router().post(
   body("accepted").isBoolean().exists({ checkNull: false }),
   body("emitterId").isNumeric().exists({ checkNull: true, checkFalsy: true }),
   body("type").isString().exists({ checkNull: true, checkFalsy: true }),
-  (req, res) => {
+  (req: Request, res: Response) => {
     if (!validationResult(req).isEmpty()) {
       res.status(401).json({ errors: validationResult(req).array() });
     } else {
