@@ -1,34 +1,38 @@
-import mongoClient from "../services/client.service.js";
 import { Observable } from "rxjs";
-import { FriendRequest } from "../schemas/cred.user.js";
 import { Request } from "express";
-import setPendingRequest from "./database.queries.set.request.js";
+import removeUserRequest from "./db.qri.remove.request.user.js";
+import mongoClient from "../services/client.service.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const sendRequest = (req: Request): Observable<boolean> => {
-  const userRequest = req.body as FriendRequest;
+const sendResponse = (req: Request): Observable<Boolean> => {
+  const { id, emitterId, accepted } = req.body;
   return new Observable((suscriber) => {
     const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
-
-      const settendPending = await setPendingRequest(req).then((bool) => bool);
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-      const userid = userRequest.to;
-      if (settendPending) {
-        delete userRequest.token;
-        delete userRequest.to;
+
+      const removedFromPending = await removeUserRequest(req).then(
+        (updated) => updated
+      );
+      if (removedFromPending) {
         await collection
           .updateOne(
-            { "user.userid": userid },
-            { $push: { "user.friendRequest": userRequest } }
+            {
+              $and: [
+                { "user.pendingRequest": { $elemMatch: { to: emitterId } } },
+                { "user.userid": id },
+              ],
+            },
+            { $set: { "user.pendingRequest.$.accepted": accepted } }
           )
           .then((updateResponse) => {
-            if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
+            console.log(updateResponse);
+            if (updateResponse.modifiedCount > 0) suscriber.next(true);
           })
           .catch((err) => {
             suscriber.error(err.message + " " + err.name);
@@ -43,4 +47,4 @@ const sendRequest = (req: Request): Observable<boolean> => {
   });
 };
 
-export default sendRequest;
+export default sendResponse;

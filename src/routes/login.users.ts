@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { validationResult, body } from "express-validator";
-import checkUser from "../database/database.queries.login.js";
+import checkUser from "../database/db.qr.login.js";
 
 const login = Router().post(
   "/chat-api/v1.0/login-user",

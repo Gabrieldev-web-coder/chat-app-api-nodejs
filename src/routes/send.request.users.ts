@@ -1,5 +1,5 @@
 import { Router } from "express";
-import sendRequest from "../database/database.queries.request.user.js";
+import sendRequest from "../database/db.qr.request.user.js";
 import validateJwt from "../middlewares/check.jwt.js";
 import { validationResult, header, body } from "express-validator";
 

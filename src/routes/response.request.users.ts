@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validationResult, body, header } from "express-validator";
 import validateJwt from "../middlewares/check.jwt.js";
-import sendResponse from "../database/database.queries.response.user.js";
+import sendResponse from "../database/db.qr.response.user.js";
 
 const userFriendResponse = Router().post(
   "/chat-api/v1.0/friend-response",

@@ -1,37 +1,33 @@
-import { Observable } from "rxjs";
-import { Request } from "express";
-import removeUserRequest from "./database.queries.remove.request.user.js";
 import mongoClient from "../services/client.service.js";
+import { Observable } from "rxjs";
+import { FriendRequest } from "../schemas/cred.user.js";
+import { Request } from "express";
+import setPendingRequest from "./db.qr.set.request.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const sendResponse = (req: Request): Observable<any> => {
-  const { id, emitterId, accepted } = req.body;
+const sendRequest = (req: Request): Observable<boolean> => {
+  const userRequest = req.body as FriendRequest;
   return new Observable((suscriber) => {
     const client = mongoClient;
     client.connect(async (err) => {
       if (err) suscriber.error(err.name + " " + err.message);
+
+      const settendPending = await setPendingRequest(req).then((bool) => bool);
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-
-      const removedFromPending = await removeUserRequest(req).then(
-        (updated) => updated
-      );
-      if (removedFromPending) {
+      const userid = userRequest.to;
+      if (settendPending) {
+        delete userRequest.token;
+        delete userRequest.to;
         await collection
           .updateOne(
-            {
-              $and: [
-                { "user.pendingRequest": { $elemMatch: { to: emitterId } } },
-                { "user.userid": id },
-              ],
-            },
-            { $set: { "user.pendingRequest.$.accepted": accepted } }
+            { "user.userid": userid },
+            { $push: { "user.friendRequest": userRequest } }
           )
           .then((updateResponse) => {
-            console.log(updateResponse);
             if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
           })
           .catch((err) => {
@@ -47,4 +43,4 @@ const sendResponse = (req: Request): Observable<any> => {
   });
 };
 
-export default sendResponse;
+export default sendRequest;
