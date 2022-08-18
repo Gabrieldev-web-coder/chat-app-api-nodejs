@@ -28,13 +28,15 @@ const sendRequest = (req: Request): Observable<boolean> => {
             { $push: { "user.friendRequest": userRequest } }
           )
           .then((updateResponse) => {
-            if (updateResponse.acknowledged.valueOf()) suscriber.next(true);
+            updateResponse.modifiedCount > 0
+              ? suscriber.next(true)
+              : suscriber.next(false);
           })
           .catch((err) => {
             suscriber.error(err.message + " " + err.name);
           })
-          .finally(() => {
-            client.close().finally(() => {
+          .finally(async () => {
+            await client.close().finally(() => {
               suscriber.complete();
             });
           });

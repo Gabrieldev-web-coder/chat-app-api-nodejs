@@ -26,13 +26,10 @@ const setPendingRequest = (req: Request): Promise<boolean> => {
           { $push: { "user.pendingRequest": userInfo } }
         )
         .then((updateResponse) => {
-          if (updateResponse.acknowledged.valueOf()) resolve(true);
+          updateResponse.modifiedCount > 0 ? resolve(true) : resolve(false);
         })
         .catch((err) => {
           reject(err.message + " " + err.name);
-        })
-        .finally(() => {
-          client.close();
         });
     });
   });
