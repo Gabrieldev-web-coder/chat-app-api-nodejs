@@ -20,17 +20,35 @@ const setPendingRequest = (req: Request): Promise<boolean> => {
       const collection = client
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
-      await collection
-        .updateOne(
-          { "user.userid": from },
-          { $push: { "user.pendingRequest": userInfo } }
-        )
-        .then((updateResponse) => {
-          updateResponse.modifiedCount > 0 ? resolve(true) : resolve(false);
+
+      const requestExist = await collection
+        .find()
+        .filter({
+          $and: [
+            { "user.userid": from },
+            {
+              "user.pendingRequest": {
+                $elemMatch: { to: to, accepted: accepted },
+              },
+            },
+          ],
         })
-        .catch((err) => {
-          reject(err.message + " " + err.name);
-        });
+        .toArray();
+      if (requestExist.length > 0) {
+        resolve(false);
+      } else {
+        await collection
+          .updateOne(
+            { "user.userid": from },
+            { $push: { "user.pendingRequest": userInfo } }
+          )
+          .then((updateResponse) => {
+            updateResponse.modifiedCount > 0 ? resolve(true) : resolve(false);
+          })
+          .catch((err) => {
+            reject(err.message + " " + err.name);
+          });
+      }
     });
   });
 };

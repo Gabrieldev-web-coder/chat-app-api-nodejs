@@ -19,6 +19,7 @@ const sendRequest = (req: Request): Observable<boolean> => {
         .db(process.env.DB_REGISTER)
         .collection(process.env.DB_COLLECTION_REGISTERED);
       const userid = userRequest.to;
+      const { to } = userRequest;
       if (settendPending) {
         delete userRequest.token;
         delete userRequest.to;
@@ -40,6 +41,8 @@ const sendRequest = (req: Request): Observable<boolean> => {
               suscriber.complete();
             });
           });
+      } else {
+        suscriber.error(`You already send a friend request to ${to} user.`);
       }
     });
   });
