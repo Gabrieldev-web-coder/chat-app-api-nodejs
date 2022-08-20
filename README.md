@@ -24,7 +24,7 @@ This is a relatively simple rest api for made basic operations on database for m
   On success response will return a simple json containing basic information of user, should looks like following.
 
   - **Code:** 200 <br />
-    **Content:** `{ "email": "example@gmail.com", "username": "example", "userid": 6916, "picurl": "https://svgsilh.com/svg/1699635.svg", "country": "ec", "description": "Hi! i'm example, nice to meet you! :D" }`
+    **Content:** `{ "email": "example@gmail.com", "username": "example", "userid": 0002, "picurl": "https://svgsilh.com/svg/1699635.svg", "country": "ec", "description": "Hi! i'm example, nice to meet you! :D" }`
 
 - **Error Response:**
 
