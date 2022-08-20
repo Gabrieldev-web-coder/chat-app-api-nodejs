@@ -6,7 +6,7 @@ This is a relatively simple rest api for made basic operations on database for m
 
 - **URL**
 
-  /chat-api/v1.0/**user?id=<user-id>**
+  /chat-api/v1.0/**user?id=user-id**
 
 - **Method:**
 
@@ -20,33 +20,19 @@ This is a relatively simple rest api for made basic operations on database for m
 
   `id=[integer]`
 
-- **Data Params**
-
-  <_If making a post request, what should the body payload look like? URL Params rules apply here too._>
-
 - **Success Response:**
-
-  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
+  On success response will return a simple json containing basic information of user, should looks like following.
 
   - **Code:** 200 <br />
-    **Content:** `{ id : 12 }`
+    **Content:** `{ "email": "example@gmail.com", "username": "example", "userid": 6916, "picurl": "https://svgsilh.com/svg/1699635.svg", "country": "ec", "description": "Hi! i'm example, nice to meet you! :D" }`
 
 - **Error Response:**
 
-  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+  If for some reason user's id that was provided not exist just will return a simple body with errors fields as follow.
 
-  - **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "Log in" }`
-
-  OR
-
-  - **Code:** 422 UNPROCESSABLE ENTRY <br />
-    **Content:** `{ error : "Email Invalid" }`
+  - **Code:** 404 NOT FOUND <br />
+    **Content:** `{ errors : "This user don't exist." }`
 
 - **Sample Call:**
 
-  <_Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable._>
-
-- **Notes:**
-
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._>
+  /chat-api/v1.0/**user?id=0001**
