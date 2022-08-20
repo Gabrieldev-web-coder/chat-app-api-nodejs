@@ -19,7 +19,7 @@ const verifyJwt = (token: string): Observable<string | JwtPayload> => {
     const decoded = verify(token, process.env.SECRET);
     if (!decoded)
       suscriber.error(
-        "Given token was modified or was not provided by server."
+        "Given token was modified, was not provided by server, or expired. "
       );
     suscriber.next(decoded);
   });

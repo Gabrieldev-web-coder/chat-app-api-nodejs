@@ -7,9 +7,11 @@ const validateJwt: CustomValidator = (value: string) => {
       next: (token) => {
         if (token) resolve(true);
       },
-      error: (err) => { if(err) reject(false) },
+      error: (err) => {
+        if (err) reject(err);
+      },
     });
   });
 };
 
-export default validateJwt
+export default validateJwt;
