@@ -111,7 +111,7 @@ This is a relatively simple rest api for made basic operations on database for m
 
 - **Error Response:**
 
-  Depending type of error, will return a json with a "errors" field saying what's wrong with request
+  Depending type of error, will return a json with a "errors" field saying what's wrong with request.
 
   - **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:**
@@ -126,3 +126,53 @@ This is a relatively simple rest api for made basic operations on database for m
 - **Sample Call:**
 
   /chat-api/v1.0/**login-user**
+
+## Register users
+
+- **URL**
+
+  /chat-api/v1.0/**register-user**
+
+- **Method:**
+
+  `POST`
+
+- **Data Params**
+
+  Here must send an email, username and password as body payload to confirm a new user registered.
+
+  **Payload:**
+
+```json
+{
+  "email": "example@hotmail.com",
+  "username": "exampleUser",
+  "pwd": "1234567890"
+}
+```
+
+- **Success Response:**
+  On success response will return a jwt to session initialization, should looks as follow.
+
+  - **Code:** 200 <br />
+    **Content:**
+
+```json
+{
+  "token": "token."
+}
+```
+
+- **Error Response:**
+
+  Depending type of error, will return a json with a "errors" field saying what's wrong with request.
+
+  - **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:**
+    ```json
+    { "errors": "Your username or email is already taken." }
+    ```
+
+- **Sample Call:**
+
+  /chat-api/v1.0/**register-user**
