@@ -21,6 +21,7 @@ This is a relatively simple rest api for made basic operations on database for m
   `id=[integer]`
 
 - **Success Response:**
+
   On success response will return a simple json containing basic information of user, should looks like following.
 
   - **Code:** 200 <br />
@@ -74,6 +75,7 @@ This is a relatively simple rest api for made basic operations on database for m
 ```
 
 - **Success Response:**
+
   On success response will return a json with complete user's information, should looks as follow.
 
   - **Code:** 200 <br />
@@ -152,15 +154,14 @@ This is a relatively simple rest api for made basic operations on database for m
 ```
 
 - **Success Response:**
+
   On success response will return a jwt to session initialization, should looks as follow.
 
   - **Code:** 200 <br />
     **Content:**
 
 ```json
-{
-  "token": "token."
-}
+{ "token": "token." }
 ```
 
 - **Error Response:**
@@ -169,10 +170,81 @@ This is a relatively simple rest api for made basic operations on database for m
 
   - **Code:** 500 INTERNAL SERVER ERROR <br />
     **Content:**
-    ```json
-    { "errors": "Your username or email is already taken." }
-    ```
+
+```json
+{ "errors": "Your username or email is already taken." }
+```
 
 - **Sample Call:**
 
   /chat-api/v1.0/**register-user**
+
+## Update users
+
+- **URL**
+
+  /chat-api/v1.0/**update-user**
+
+- **Method:**
+
+  `PUT`
+
+- **Data Params**
+
+  Payload of this route consist in the fields the user want change, with the new value to replace it.
+
+  **Optional fields:**
+
+```json
+{
+  "email": "newExample@hotmail.com",
+  "username": "newExampleUser",
+  "picurl": "newPic",
+  "country": "newLocation",
+  "description": "newDescription"
+}
+```
+
+**Required fields:**
+
+```json
+{
+  "token": "token"
+}
+```
+
+- **Success Response:**
+
+  On success response will return a message field with a message field and a boolean value if update was made sucessfully.
+
+  - **Code:** 200 <br />
+    **Content:**
+
+```json
+{ "message": true }
+```
+
+- **Error Response:**
+
+  At this request can went wrong token body, by signature, expired, or invalid values, body should looks like follow.
+
+  - **Code:** 401 Unauthorized <br />
+    **Content:**
+
+```json
+{
+  "message": "No authorized",
+  "errors": [
+    {
+      "value": "given token",
+      "msg": "invalid signature",
+      "param": "token",
+      "location": "body"
+    }
+  ]
+}
+```
+
+- **Sample Call:**
+
+  /chat-api/v1.0/**update-user**

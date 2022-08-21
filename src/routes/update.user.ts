@@ -14,10 +14,6 @@ const update = Router().put(
     .optional(true)
     .isLength({ min: 4 })
     .exists({ checkFalsy: true, checkNull: true }),
-  body("pwd")
-    .optional(true)
-    .isLength({ min: 8 })
-    .exists({ checkFalsy: true, checkNull: true }),
   body("picurl")
     .optional(true)
     .isURL()
