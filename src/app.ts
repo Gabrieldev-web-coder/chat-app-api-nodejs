@@ -9,7 +9,8 @@ import findUser from "./routes/find.users.js";
 import userFriendRequest from "./routes/send.request.users.js";
 import userFriendResponse from "./routes/response.request.users.js";
 import removePending from "./routes/remove.pending.users.js";
-
+import addFriend from "./routes/add.friends.users.js";
+import removeFriend from "./routes/remove.friends.users.js";
 dotenv.config();
 
 const app = express();
@@ -33,5 +34,9 @@ app.use(removePending);
 app.use(userFriendRequest);
 
 app.use(userFriendResponse);
+
+app.use(addFriend);
+
+app.use(removeFriend);
 
 app.listen(port, () => console.log("http://localhost:" + port));
