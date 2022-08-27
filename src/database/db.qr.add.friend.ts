@@ -22,7 +22,7 @@ const addFriendList = (req: Request): Observable<boolean> => {
               { "user.friends": { $not: { $elemMatch: { friendId: id } } } },
             ],
           },
-          { $push: { "user.friends": id } }
+          { $push: { "user.friends": { friendId: id } } }
         )
         .then(async (update) => {
           suscriber.next(update.modifiedCount > 0);

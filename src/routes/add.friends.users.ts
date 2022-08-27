@@ -2,7 +2,7 @@ import { Router } from "express";
 import dotenv from "dotenv";
 import validateJwt from "../middlewares/check.jwt.js";
 import { validationResult, header, body } from "express-validator";
-import addFriendList from "../database/db.qr.add.friend";
+import addFriendList from "../database/db.qr.add.friend.js";
 
 dotenv.config();
 
