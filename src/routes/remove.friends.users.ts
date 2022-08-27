@@ -1,6 +1,6 @@
 import { Router } from "express";
 import dotenv from "dotenv";
-import validateJwt from "../middlewares/check.jwt";
+import validateJwt from "../middlewares/check.jwt.js";
 import { validationResult, header, body } from "express-validator";
 import removeFriendList from "../database/db.qr.remove.friend.js";
 
