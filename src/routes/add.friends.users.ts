@@ -6,7 +6,7 @@ import addFriendList from "../database/db.qr.add.friend.js";
 
 dotenv.config();
 
-const addFriend = Router().post(
+const addFriend = Router().put(
   "/chat-api/v1.0/add-friend",
   header("Authorization"),
   body("token")

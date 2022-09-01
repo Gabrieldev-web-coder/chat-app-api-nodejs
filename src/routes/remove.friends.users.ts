@@ -6,7 +6,7 @@ import removeFriendList from "../database/db.qr.remove.friend.js";
 
 dotenv.config();
 
-const removeFriend = Router().post(
+const removeFriend = Router().put(
   "/chat-api/v1.0/remove-friend",
   header("Authorization"),
   body("token")
