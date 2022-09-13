@@ -83,31 +83,29 @@ This is a relatively simple rest api for made basic operations on database for m
 
 ```json
 {
-  "result": {
-    "email": "example@hotmail.com",
-    "username": "example",
-    "userid": 0001,
-    "picurl": "https://svgsilh.com/svg/1699635.svg",
-    "country": "ec",
-    "accountCreatedAt": "Thursday, August 11, 2022 9:47 AM",
-    "description": "Hi! i'm example, nice to meet you! :D",
-    "lastMoficationAt": "No changes yet.",
-    "groups": [],
-    "friends": [],
-    "pendingRequest": [
-      {
-        "to": 9998,
-        "accepted": null
-      }
-    ],
-    "friendRequest": [
-      {
-        "from": 9991,
-        "accepted": null
-      }
-    ],
-    "token": "token."
-  }
+  "email": "example@hotmail.com",
+  "username": "example",
+  "userid": 0001,
+  "picurl": "https://svgsilh.com/svg/1699635.svg",
+  "country": "ec",
+  "accountCreatedAt": "Thursday, August 11, 2022 9:47 AM",
+  "description": "Hi! i'm example, nice to meet you! :D",
+  "lastMoficationAt": "No changes yet.",
+  "groups": [],
+  "friends": [],
+  "pendingRequest": [
+    {
+      "to": 9998,
+      "accepted": null
+    }
+  ],
+  "friendRequest": [
+    {
+      "from": 9991,
+      "accepted": null
+    }
+  ],
+  "token": "token."
 }
 ```
 
