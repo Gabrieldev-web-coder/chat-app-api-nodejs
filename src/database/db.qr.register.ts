@@ -36,7 +36,7 @@ const registerUser = (user: registerNewUser) => {
               })
               .then((value) => {
                 if (!jwtErr) {
-                  suscriber.next({ saveResult: value, token: token });
+                  suscriber.next({ token: token });
                 } else {
                   suscriber.error("Error generating token: " + jwtErr);
                 }
