@@ -27,7 +27,7 @@ const register = Router().post(
     } else {
       const body = await generateUser(req);
       registerUser(body).subscribe({
-        next: (value) => res.status(201).json({ result: value }),
+        next: (value) => res.status(201).json(value),
         error: (err) => res.status(500).json({ errors: err }),
       });
     }
