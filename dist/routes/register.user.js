@@ -31,7 +31,7 @@ const register = Router().post("/chat-api/v1.0/register-user", body("email")
     else {
         const body = yield generateUser(req);
         registerUser(body).subscribe({
-            next: (value) => res.status(201).json({ result: value }),
+            next: (value) => res.status(201).json(value),
             error: (err) => res.status(500).json({ errors: err }),
         });
     }
